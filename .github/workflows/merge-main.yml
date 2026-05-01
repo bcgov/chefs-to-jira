@@ -1,0 +1,113 @@
+name: Merge
+
+on:
+  workflow_run:
+    workflows: [PR Closed]
+    types: [completed]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  deploys-test:
+    name: TEST Deploys
+    environment: test
+    runs-on: ubuntu-22.04
+    permissions:
+      issues: write
+    strategy:
+      matrix:
+        name:
+          - init
+          - database
+        include:
+          - name: init
+            file: common/openshift.init.yml
+            overwrite: false
+          - name: database
+            file: database/openshift.deploy.yml
+            overwrite: false
+    steps:
+      - uses: bcgov-nr/action-deployer-openshift@v1.4.0
+        with:
+          file: ${{ matrix.file }}
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          overwrite: ${{ matrix.overwrite }}
+          parameters:
+            -p ZONE=test -p PROMOTE=${{ github.repository }}/${{ matrix.name }}:test
+            -p NAME=${{ github.event.repository.name }} ${{ matrix.parameters }}
+          penetration_test: true
+          penetration_test_artifact: ${{ matrix.name }}
+          penetration_test_issue: ${{ matrix.name }}
+          penetration_test_token: ${{ secrets.GITHUB_TOKEN }}
+          verification_path: ${{ matrix.verification_path }}
+
+  ghcr-cleanup:
+    name: GHCR Cleanup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        name:
+          - database
+    steps:
+      - name: Keep last 50
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: "${{ github.event.repository.name }}/${{ matrix.name }}"
+          package-type: "container"
+          min-versions-to-keep: 50
+          ignore-versions: "^(prod|test)$"
+
+  deploys-prod:
+    name: PROD Deploys
+    needs: [integration-tests, cypress-e2e]
+    environment: prod
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        name:
+          - database
+          - init
+        include:
+          - name: database
+            file: database/openshift.deploy.yml
+            overwrite: false
+          - name: init
+            file: common/openshift.init.yml
+            overwrite: false
+
+    steps:
+      - uses: bcgov-nr/action-deployer-openshift@v1.4.0
+        with:
+          file: ${{ matrix.file }}
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
+          oc_server: ${{ vars.OC_SERVER }}
+          oc_token: ${{ secrets.OC_TOKEN }}
+          overwrite: ${{ matrix.overwrite }}
+          parameters:
+            -p ZONE=prod -p PROMOTE=${{ github.repository }}/${{ matrix.name }}:test
+            -p NAME=${{ github.event.repository.name }} ${{ matrix.parameters }}
+          penetration_test: false
+          verification_path: ${{ matrix.verification_path }}
+
+  image-promotions:
+    name: Promote images to PROD
+    needs: [deploys-prod]
+    runs-on: ubuntu-22.04
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        component:
+          - database
+    steps:
+      - uses: shrink/actions-docker-registry-tag@v3
+        with:
+          registry: ghcr.io
+          repository: ${{ github.repository }}/${{ matrix.component }}
+          target: test
+          tags: prod
