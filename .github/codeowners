@@ -1,7 +1,5 @@
 # Matched against repo root (asterisk)
-# *                         @pplatten @hhay1981
 
-# Matched against directories
-# /.github/workflows/       @pplatten @hhay1981
+# \* @pplatten @hhay1981
 
 # See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners

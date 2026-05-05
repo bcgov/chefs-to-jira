@@ -2,7 +2,7 @@ import os
 from py_compile import main
 import sys
 import constants
-from log_helper import LOGGER
+from src.utilities.log_helper import LOGGER
 import smtplib
 import socket
 import time
