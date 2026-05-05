@@ -8,3 +8,4 @@ if os.path.exists(envPath):
 
 SMTP_SERVER = os.environ['SMTP_SERVER']
 DEBUG_EMAIL = os.environ['DEBUG_EMAIL']
+FROM_EMAIL = os.environ['FROM_EMAIL']
