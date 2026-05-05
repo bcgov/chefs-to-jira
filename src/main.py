@@ -1,7 +1,7 @@
 import os
 from py_compile import main
 import sys
-import constants
+import src.utilities.constants as constants
 from src.utilities.log_helper import LOGGER
 import smtplib
 import socket
@@ -9,8 +9,6 @@ import time
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-from .core.config import Configuration
 
 def send_admin_email(message_detail):
     msg = MIMEMultipart("related")

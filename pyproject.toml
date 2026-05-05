@@ -7,7 +7,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-sqlalchemy = "^2.0.15"
 pydantic = {version ="^1.10.9"}
 python-dotenv = 0.17.1
 
