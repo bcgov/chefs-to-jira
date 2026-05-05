@@ -9,3 +9,7 @@
 ## 🔄 Update JIRA tickets with information from CHEFS form Submissions
 
 This repository contains files relating to a new project. It is early development/discovery.
+
+## Credits
+
+This repository contains components from bcgov/quickstart-openshift, bcgov/quickstart-openshift-backends, and bcgov/copilot-instructions
