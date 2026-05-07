@@ -1,6 +1,6 @@
 import os
 import requests
-from cdogs_auth import get_cdogs_token
+from src.cdogs.cdogs_auth import get_cdogs_token
 
 ENV = "test"
 
