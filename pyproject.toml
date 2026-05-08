@@ -1,15 +1,29 @@
 [tool.poetry]
-name = "chefstojira"
+name = "chefs-to-jira"
 version = "0.1.0"
 description = "Take CHEFS Data to JIRA Tickets"
 authors = ["DMI"]
 readme = "README.md"
 
+
+packages = [
+    { include = "jira", from = "src" },
+    { include = "cdogs", from = "src" }
+]
+
+
 [tool.poetry.dependencies]
 python = "^3.11"
-pydantic = {version ="^1.10.9"}
-python-dotenv = 0.17.1
+pydantic = "^1.10.9"
+python-dotenv = "^0.17.1"
+jira = "^3.10.5"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
