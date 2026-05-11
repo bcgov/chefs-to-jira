@@ -1,5 +1,6 @@
-import jira
 import datetime
+from jira.client import ResultList
+from jira.resources import Issue
 
 def get_jira_tickets(client, project, component, younger_than_minutes = 10080):
 
@@ -15,7 +16,21 @@ def get_jira_tickets(client, project, component, younger_than_minutes = 10080):
         f'component = "{component}" AND '
         f'created >= "{cutoff_str}"'
     )
-    issues = client.search_issues(JQL_query)
 
-    for issue in issues:
-        print(f"{issue.key}: {issue.fields.summary}")
+    try:
+        issues: ResultList[Issue] = client.search_issues(JQL_query, maxResults=5)
+    except Exception as e:
+        print(f"Error searching for JIRA tickets: {e}")
+        raise
+
+    return issues
+
+def get_jira_ticket(client, issue_key):
+
+    try:
+        issue = client.issue(issue_key)
+        return issue
+    except Exception as e:
+        print(f"Error fetching JIRA ticket {issue_key}: {e}")
+        raise
+
