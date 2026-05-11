@@ -9,7 +9,7 @@ if os.path.exists(envPath):
 JIRA_API_URL = os.environ['jira_api_url']
 
 # JIRA Client setup
-# Note: Secret and Token are not both required. Token authentication is in development.
+# Note: Secret and Token are not both required. Token authentication is in development, secret will be deprecated.
 JIRA_CLIENT_ID = os.environ['jira_client_id']
 JIRA_CLIENT_EMAIL = os.environ['jira_client_email']
 JIRA_CLIENT_SECRET = os.environ['jira_client_secret']
