@@ -21,3 +21,7 @@ JIRA_COMPONENT = os.environ['jira_component']
 
 # JIRA Search constants
 JIRA_YOUNGER_THAN_MINUTES = int(os.environ['jira_younger_than_minutes'])
+
+# JIRA Test Script Items
+JIRA_TEST_FILE_PATH = os.environ['jira_test_file_path']
+JIRA_TEST_ISSUE_KEY = os.environ['jira_test_issue_key']

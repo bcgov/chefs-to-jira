@@ -9,5 +9,5 @@ try:
     print("✅ JIRA connection successful")
     print("Available projects:", [project.key for project in projects])
 except Exception as e:
-    print(f"Error fetching projects from JIRA: {e}")
+    print(f"❌ Error fetching projects from JIRA: {e}")
     raise
