@@ -7,6 +7,7 @@ from jira_helpers.jira_attachments import attachment_on_issue, add_attachment_to
 jira_client = get_jira_client()
 
 # Setup for testing
+JIRA_TEST_FILE_NAME = JIRA_TEST_FILE_PATH.split("/")[-1]
 try:
     # Get the test issue.
     issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
@@ -26,7 +27,7 @@ try:
     # 5. Check that the test issue was succesfully cleaned up.
 
     # 1. Check that the test attachment is not already on the issue.
-    attachment_found = attachment_on_issue(issue, "test_attachment.txt")
+    attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_NAME)
     if attachment_found:
         raise ValueError("❌ Attachment found on issue")
     else:
@@ -41,7 +42,7 @@ try:
 
     # 3. Check the test attachment is now on the issue.
     issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
-    attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_PATH.split("/")[-1])
+    attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_NAME)
     if attachment_found:
         print("✅ Attachment found on issue")
     else:
@@ -49,7 +50,7 @@ try:
 
     # 4. Remove the test attachment
     # Note: JIRA's API does not currently support removing attachments by filename, so this test will fail until that functionality is added. See https://ecosystem.atlassian.net/browse/JRA-123456 for details.
-    attachment_removed = remove_attachment_from_issue(issue, JIRA_TEST_FILE_PATH.split("/")[-1])
+    attachment_removed = remove_attachment_from_issue(issue, JIRA_TEST_FILE_NAME)
     if attachment_removed:
         print("✅ Attachment removed from issue")
     else:
@@ -58,7 +59,7 @@ try:
 
     # 5. Check that the test issue was succesfully cleaned up.
     issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
-    attachment_found = attachment_on_issue(issue, "test_attachment.txt")
+    attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_NAME)
     if attachment_found:
         raise ValueError("❌ Attachment was not cleaned up from issue")
     else:
