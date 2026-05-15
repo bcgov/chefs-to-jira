@@ -2,8 +2,13 @@ import datetime
 from jira.client import ResultList
 from jira.resources import Issue
 
-def get_jira_tickets(client, project, component, younger_than_minutes = 10080):
 
+def jql_literal(s: str) -> str:
+    """Return a JQL-safe quoted literal, preserving interior and trailing spaces."""
+    """This is mostly important for the Component field, which has a trailing space in the value."""
+    return f'"{s}"'
+
+def get_jira_tickets_query(project, reporter="donotreplyCHEFS@gov.bc.ca", component=None, younger_than_minutes=10080):
     # Calculate the cutoff date for issues created within the last younger_than_minutes
     cutoff = datetime.datetime.now() - datetime.timedelta(minutes=younger_than_minutes)
     cutoff_str = cutoff.strftime("%Y-%m-%d %H:%M")
@@ -11,11 +16,19 @@ def get_jira_tickets(client, project, component, younger_than_minutes = 10080):
     # Search for issues created by CHEFS with the correct project and component
     JQL_query = (
         f'request-channel-type = email AND '
-        f'reporter = "donotreplyCHEFS@gov.bc.ca" AND '
-        f'project = "{project}" AND '
-        f'component = "{component}" AND '
-        f'created >= "{cutoff_str}"'
+        f'project = {jql_literal(project)} AND '
+        f'created >= {jql_literal(cutoff_str)}'
     )
+
+    if reporter:
+        JQL_query += f' AND reporter = {jql_literal(reporter)}'
+
+    if component:
+        JQL_query += f' AND component = {jql_literal(component)}'
+
+    return JQL_query
+
+def get_jira_tickets(client, JQL_query):
 
     try:
         issues: ResultList[Issue] = client.search_issues(JQL_query, maxResults=5)
