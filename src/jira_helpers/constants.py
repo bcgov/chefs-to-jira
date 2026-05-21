@@ -19,5 +19,10 @@ JIRA_CLIENT_TOKEN = os.getenv('jira_client_token', '')
 JIRA_PROJECT = os.getenv('jira_project', '')
 JIRA_COMPONENT = os.getenv('jira_component', '')
 JIRA_YOUNGER_THAN_MINUTES = int(os.getenv('jira_younger_than_minutes', '0'))
+
+
+# ---- JIRA Test Constants ----
 JIRA_TEST_FILE_PATH = os.getenv('jira_test_file_path', '')
 JIRA_TEST_ISSUE_KEY = os.getenv('jira_test_issue_key', '')
+JIRA_PROJECT = os.getenv('jira_project', '')
+JIRA_COMPONENT = os.getenv('jira_component', '')
