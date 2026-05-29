@@ -18,7 +18,7 @@ def get_jira_client():
             auth_source = "username + password"
         else:
             raise ValueError(
-                "Missing Jira auth credential. Set jira_client_token or jira_client_secret."
+                "Missing Jira auth credential. Set JIRA_CLIENT_TOKEN or JIRA_CLIENT_SECRET."
             )
 
         client = jira.JIRA(server=JIRA_API_URL, **auth_kwargs)
