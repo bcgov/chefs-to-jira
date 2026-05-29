@@ -1,9 +1,11 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 
-envPath = find_dotenv(usecwd=True)
-if envPath:
-    load_dotenv(dotenv_path=envPath, override=False)
+# Load .env file only if not running in GitHub Actions (to avoid overriding secrets)
+if not os.getenv('GITHUB_ACTIONS'):
+    envPath = find_dotenv(usecwd=True)
+    if envPath:
+        load_dotenv(dotenv_path=envPath, override=False)
 
 # ---- Email / SMTP ----
 SMTP_SERVER = os.getenv('SMTP_SERVER', '')
@@ -24,5 +26,3 @@ JIRA_YOUNGER_THAN_MINUTES = int(os.getenv('JIRA_YOUNGER_THAN_MINUTES', '0'))
 # ---- JIRA Test Constants ----
 JIRA_TEST_FILE_PATH = os.getenv('JIRA_TEST_FILE_PATH', '')
 JIRA_TEST_ISSUE_KEY = os.getenv('JIRA_TEST_ISSUE_KEY', '')
-JIRA_PROJECT = os.getenv('JIRA_PROJECT', '')
-JIRA_COMPONENT = os.getenv('JIRA_COMPONENT', '')
