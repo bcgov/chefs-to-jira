@@ -35,5 +35,13 @@ jobs:
           poetry install --with dev
 
       - name: Run Tests
+        env:
+          DEBUG_EMAIL: ${{ secrets.DEBUG_EMAIL }}
+          JIRA_API_URL: ${{ secrets.JIRA_API_URL }}
+          JIRA_CLIENT_EMAIL: ${{ secrets.JIRA_CLIENT_EMAIL }}
+          JIRA_CLIENT_ID: ${{ secrets.JIRA_CLIENT_ID }}
+          JIRA_CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+
         run: |
           poetry run pytest
