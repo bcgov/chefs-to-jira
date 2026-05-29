@@ -5,11 +5,6 @@ envPath = find_dotenv(usecwd=True)
 if envPath:
     load_dotenv(dotenv_path=envPath)
 
-# ---- Email / SMTP ----
-SMTP_SERVER = os.getenv('SMTP_SERVER', '')
-DEBUG_EMAIL = os.getenv('DEBUG_EMAIL', '')
-FROM_EMAIL = os.getenv('FROM_EMAIL', '')
-
 # ---- JIRA ----
 JIRA_API_URL = os.getenv('jira_api_url', '')
 JIRA_CLIENT_ID = os.getenv('jira_client_id', '')

@@ -10,6 +10,7 @@ packages = [
     { include = "cdogs", from = "src" },
     { include = "chefs", from = "src" },
     { include = "jira_helpers", from = "src" },
+    { include = "ess_helpers", from = "src" },
     { include = "tests", from = "." },
     { include = "utilities", from = "src" }
 ]
@@ -20,6 +21,8 @@ python = "^3.11"
 pydantic = "^1.10.9"
 python-dotenv = ">=1.0"
 jira = "^3.10.5"
+nats-py = {version = "^2.6.0", extras = ["nkeys"]}
+cryptography = "^42.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"
