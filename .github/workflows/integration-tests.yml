@@ -43,12 +43,12 @@ jobs:
           JIRA_CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
 
-          FROM_EMAIL: ${{ env.FROM_EMAIL }}
-          JIRA_COMPONENT: ${{ env.JIRA_COMPONENT }}
-          JIRA_PROJECT: ${{ env.JIRA_PROJECT }}
-          JIRA_TEST_FILE_PATH: ${{ env.JIRA_TEST_FILE_PATH }}
-          JIRA_TEST_ISSUE_KEY: ${{ env.JIRA_TEST_ISSUE_KEY }}
-          JIRA_YOUNGER_THAN_MINUTES: ${{ env.JIRA_YOUNGER_THAN_MINUTES }}
+          FROM_EMAIL: ${{ vars.FROM_EMAIL }}
+          JIRA_COMPONENT: ${{ vars.JIRA_COMPONENT }}
+          JIRA_PROJECT: ${{ vars.JIRA_PROJECT }}
+          JIRA_TEST_FILE_PATH: ${{ vars.JIRA_TEST_FILE_PATH }}
+          JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
+          JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
 
         run: |
           poetry run pytest
