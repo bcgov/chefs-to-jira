@@ -8,12 +8,8 @@ from . import constants
 def send_admin_email(message_detail):
     msg = MIMEMultipart("related")
     msg["Subject"] = "Script Report"
-    if constants.DEBUG_EMAIL == "":
-        msg["From"] = "NRIDS.Optimize@gov.bc.ca"
-        msg["To"] = "NRIDS.Optimize@gov.bc.ca"
-    else:
-        msg["To"] = constants.DEBUG_EMAIL
-        msg["From"] = constants.DEBUG_EMAIL
+    msg["To"] = constants.DEBUG_EMAIL
+    msg["From"] = constants.DEBUG_EMAIL
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     host_name = socket.gethostname()
