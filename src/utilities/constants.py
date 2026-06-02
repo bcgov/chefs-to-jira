@@ -1,11 +1,11 @@
 import os
-import dotenv
+from dotenv import load_dotenv, find_dotenv
 
-envPath = os.path.join(os.path.dirname(__file__), '.env')
-if os.path.exists(envPath):
-    print("loading dot env...")
-    dotenv.load_dotenv()
+envPath = find_dotenv(usecwd=True)
+if envPath:
+    load_dotenv(dotenv_path=envPath)
 
-SMTP_SERVER = os.environ['SMTP_SERVER']
-DEBUG_EMAIL = os.environ['DEBUG_EMAIL']
-DEBUG_EMAIL = os.environ['FROM_EMAIL']
+# ---- Email / SMTP ----
+SMTP_SERVER = os.getenv('SMTP_SERVER', '')
+DEBUG_EMAIL = os.getenv('DEBUG_EMAIL', '')
+FROM_EMAIL = os.getenv('FROM_EMAIL', '')

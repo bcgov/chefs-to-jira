@@ -1,0 +1,54 @@
+name: Integration Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - integration
+  pull_request:
+    branches:
+      - integration
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create false
+
+      - name: Install Dependencies
+        run: |
+          poetry install --with dev
+
+      - name: Run Tests
+        env:
+          DEBUG_EMAIL: ${{ secrets.DEBUG_EMAIL }}
+          JIRA_API_URL: ${{ secrets.JIRA_API_URL }}
+          JIRA_CLIENT_EMAIL: ${{ secrets.JIRA_CLIENT_EMAIL }}
+          JIRA_CLIENT_ID: ${{ secrets.JIRA_CLIENT_ID }}
+          JIRA_CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+
+          FROM_EMAIL: ${{ vars.FROM_EMAIL }}
+          JIRA_COMPONENT: ${{ vars.JIRA_COMPONENT }}
+          JIRA_PROJECT: ${{ vars.JIRA_PROJECT }}
+          JIRA_TEST_FILE_PATH: ${{ vars.JIRA_TEST_FILE_PATH }}
+          JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
+          JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
+
+        run: |
+          poetry run pytest

@@ -1,7 +1,7 @@
 import os
 import time
 import requests
-from dotenv import load_dotenv
+from . import constants
 
 # Module-level cache (per Python process)
 _TOKEN_CACHE = {
@@ -32,26 +32,25 @@ def get_cdogs_token(env: str = "test", refresh_skew_seconds: int = 30) -> str:
         return _TOKEN_CACHE["access_token"]
 
     # ⏳ Token missing or expired -> fetch new one
-    load_dotenv()
 
     CONFIG = {
         "dev": {
-            "client_id": os.getenv("cdogs_client_id_dev"),
-            "client_secret": os.getenv("cdogs_client_secret_dev"),
-            "token_url": os.getenv("cdogs_login_proxy_dev"),
-            "api_url": os.getenv("cdogs_api_url_dev"),
+            "client_id": constants.CDOGS_CLIENT_ID_DEV,
+            "client_secret": constants.CDOGS_CLIENT_SECRET_DEV,
+            "token_url": constants.CDOGS_LOGIN_PROXY_DEV,
+            "api_url": constants.CDOGS_API_URL_DEV,
         },
         "test": {
-            "client_id": os.getenv("cdogs_client_id_test"),
-            "client_secret": os.getenv("cdogs_client_secret_test"),
-            "token_url": os.getenv("cdogs_login_proxy_test"),
-            "api_url": os.getenv("cdogs_api_url_test"),
+            "client_id": constants.CDOGS_CLIENT_ID_TEST,
+            "client_secret": constants.CDOGS_CLIENT_SECRET_TEST,
+            "token_url": constants.CDOGS_LOGIN_PROXY_TEST,
+            "api_url": constants.CDOGS_API_URL_TEST,
         },
         "prod": {
-            "client_id": os.getenv("cdogs_client_id_prod"),
-            "client_secret": os.getenv("cdogs_client_secret_prod"),
-            "token_url": os.getenv("cdogs_login_proxy_prod"),
-            "api_url": os.getenv("cdogs_api_url_prod"),
+            "client_id": constants.CDOGS_CLIENT_ID_PROD,
+            "client_secret": constants.CDOGS_CLIENT_SECRET_PROD,
+            "token_url": constants.CDOGS_LOGIN_PROXY_PROD,
+            "api_url": constants.CDOGS_API_URL_PROD,
         },
     }
 

@@ -98,13 +98,6 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
 #pdm.lock
@@ -163,9 +156,12 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-### Python Patch ###
+### Python Poetry Configuration ###
 # Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
-poetry.toml
+# Note - Normally this is excluded, but our team developers are all using an in-project virtual environment and
+#  having poetry.toml encourages developers to consistenly use the in-project virtual environment and not accidentally use a global one.
+#  We can remove this from the gitignore if we find it causes issues, but for now promoting consistency
+# poetry.toml
 
 # ruff
 .ruff_cache/

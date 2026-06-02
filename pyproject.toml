@@ -7,15 +7,18 @@ readme = "README.md"
 
 
 packages = [
-    { include = "jira", from = "src" },
-    { include = "cdogs", from = "src" }
+    { include = "cdogs", from = "src" },
+    { include = "chefs", from = "src" },
+    { include = "jira_helpers", from = "src" },
+    { include = "tests", from = "." },
+    { include = "utilities", from = "src" }
 ]
 
 
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^1.10.9"
-python-dotenv = "^0.17.1"
+python-dotenv = ">=1.0"
 jira = "^3.10.5"
 
 [tool.poetry.group.dev.dependencies]
