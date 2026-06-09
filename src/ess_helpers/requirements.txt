@@ -1,0 +1,11 @@
+# NATS client (JetStream support)
+nats-py==2.7.2
+
+# Environment variable handling (used in constants.py)
+python-dotenv==1.0.1
+
+# For structured logging (optional)
+loguru==0.7.2
+
+# For HTTP/Jira integration
+requests==2.32.3

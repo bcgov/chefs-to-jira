@@ -1,0 +1,23 @@
+{
+  "name": "ess-cryptr-bridge",
+  "version": "1.0.0",
+  "description": "Cryptr bridge for decrypting ESS CHEFS payloads",
+  "main": "decrypt_cryptr.js",
+  "type": "commonjs",
+  "scripts": {
+    "decrypt": "node decrypt_cryptr.js",
+    "test": "node decrypt_cryptr.js test_key test_payload"
+  },
+  "keywords": [
+    "cryptr",
+    "encryption",
+    "ess",
+    "chefs",
+    "nats"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cryptr": "^6.3.0"
+  }
+}
