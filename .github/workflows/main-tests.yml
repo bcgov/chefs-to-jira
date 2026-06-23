@@ -37,6 +37,7 @@ jobs:
       - name: Run Tests
         env:
           CHEFS_API_KEY: ${{ secrets.CHEFS_API_KEY }}
+          CHEFS_FORM_ID: ${{ secrets.CHEFS_FORM_ID }}
           CHEFS_TEST_FORM_ID: ${{ secrets.CHEFS_TEST_FORM_ID }}
           CHEFS_TEST_CONFIRMATION_ID: ${{ secrets.CHEFS_TEST_CONFIRMATION_ID }}
           CHEFS_TEST_SUBMISSION_ID: ${{ secrets.CHEFS_TEST_SUBMISSION_ID }}
