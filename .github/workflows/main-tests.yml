@@ -1,18 +1,18 @@
-name: Integration Tests
+name: Main Tests
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - integration
+      - main
   pull_request:
     branches:
-      - integration
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: test
+    environment: main
 
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +36,10 @@ jobs:
 
       - name: Run Tests
         env:
+          CHEFS_API_KEY: ${{ secrets.CHEFS_API_KEY }}
+          CHEFS_TEST_FORM_ID: ${{ secrets.CHEFS_TEST_FORM_ID }}
+          CHEFS_TEST_CONFIRMATION_ID: ${{ secrets.CHEFS_TEST_CONFIRMATION_ID }}
+          CHEFS_TEST_SUBMISSION_ID: ${{ secrets.CHEFS_TEST_SUBMISSION_ID }}
           DEBUG_EMAIL: ${{ secrets.DEBUG_EMAIL }}
           JIRA_API_URL: ${{ secrets.JIRA_API_URL }}
           JIRA_CLIENT_EMAIL: ${{ secrets.JIRA_CLIENT_EMAIL }}
@@ -43,12 +47,12 @@ jobs:
           JIRA_CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
 
+          CHEFS_API_BASE_URL: ${{ vars.CHEFS_API_BASE_URL }}
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
           JIRA_COMPONENT: ${{ vars.JIRA_COMPONENT }}
           JIRA_PROJECT: ${{ vars.JIRA_PROJECT }}
           JIRA_TEST_FILE_PATH: ${{ vars.JIRA_TEST_FILE_PATH }}
           JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
           JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
-
         run: |
           poetry run pytest

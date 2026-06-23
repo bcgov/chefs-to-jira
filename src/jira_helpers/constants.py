@@ -7,11 +7,6 @@ if not os.getenv('GITHUB_ACTIONS'):
     if envPath:
         load_dotenv(dotenv_path=envPath, override=False)
 
-# ---- Email / SMTP ----
-SMTP_SERVER = os.getenv('SMTP_SERVER', '')
-DEBUG_EMAIL = os.getenv('DEBUG_EMAIL', '')
-FROM_EMAIL = os.getenv('FROM_EMAIL', '')
-
 # ---- JIRA ----
 JIRA_API_URL = os.getenv('JIRA_API_URL')
 JIRA_CLIENT_ID = os.getenv('JIRA_CLIENT_ID', '')
