@@ -8,6 +8,7 @@ readme = "README.md"
 
 packages = [
     { include = "cdogs", from = "src" },
+    { include = "chefs_helpers", from = "src" },
     { include = "jira_helpers", from = "src" },
     { include = "tests", from = "." },
     { include = "utilities", from = "src" }

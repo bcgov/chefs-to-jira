@@ -1,7 +1,7 @@
 import os
 
 from chefs_helpers.chefs_helpers import get_chefs_form, get_form_cdogs_template, get_chefs_status, get_form_submissions, get_submission_attachments
-from chefs_helpers.constants import CHEFS_FORM_ID, TEST_SUBMISSION_ID, TEST_CONFIRMATION_ID
+from chefs_helpers.constants import CHEFS_FORM_ID, CHEFS_TEST_SUBMISSION_ID, CHEFS_TEST_CONFIRMATION_ID
 from utilities.file_helper import save_file
 
 def test_chefs_connection():
@@ -27,20 +27,20 @@ def test_chefs_submission_searches():
   submissions = get_form_submissions(CHEFS_FORM_ID)
   assert submissions is not None
   assert len(submissions) > 0
-  print("CHEFS form submissions:", len(submissions))
+  print("CHEFS form submission count:", len(submissions))
 
   # Get single CHEFS form submission
-  submission = get_form_submissions(submission_id=TEST_SUBMISSION_ID)
+  submission = get_form_submissions(submission_id=CHEFS_TEST_SUBMISSION_ID)
   assert submission is not None
   assert submission.get("id") is not None
-  assert submission.get("id") == TEST_SUBMISSION_ID
+  assert submission.get("id") == CHEFS_TEST_SUBMISSION_ID
   print("CHEFS form submission found:", submission.get("id"))
 
   # Get single CHEFS form submission
-  submission = get_form_submissions(confirmation_id=TEST_CONFIRMATION_ID)
+  submission = get_form_submissions(confirmation_id=CHEFS_TEST_CONFIRMATION_ID)
   assert submission is not None
   assert submission.get("id") is not None
-  assert submission.get("id") == TEST_SUBMISSION_ID
+  assert submission.get("id") == CHEFS_TEST_SUBMISSION_ID
   print("CHEFS form submission found:", submission.get("id"))
 
 
@@ -58,10 +58,11 @@ def test_chefs_cdogs_template():
     file_path = save_file(template.get("filename"), template.get("template").get("data"))
     print("CHEFS form template downloaded to:", file_path)
 
+
 def test_chefs_submission_attachments():
 
   # Get a CHEFS form submission attachments
-  attachments = get_submission_attachments(TEST_SUBMISSION_ID)
+  attachments = get_submission_attachments(CHEFS_TEST_SUBMISSION_ID)
   assert attachments is not None
   assert len(attachments) > 0
 
@@ -75,10 +76,10 @@ def test_chefs_submission_attachments():
       file_path = save_file(attachment.get("filename"), attachment.get("data"))
       print("CHEFS attachment downloaded to:", file_path)
 
-# test_chefs_connection()
-# test_chefs_form()
-# test_chefs_submission_searches()
-# test_chefs_cdogs_template()
+test_chefs_connection()
+test_chefs_form()
+test_chefs_submission_searches()
+test_chefs_cdogs_template()
 test_chefs_submission_attachments()
 
 
