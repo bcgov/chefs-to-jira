@@ -6,7 +6,7 @@
 
 # CHEFS to JIRA
 
-## 🔄 Update JIRA tickets with information from CHEFS form Submissions
+## 🔄 Update JIRA issues with information from CHEFS form Submissions
 
 This repository contains files relating to a new project. It is early development/discovery.
 
