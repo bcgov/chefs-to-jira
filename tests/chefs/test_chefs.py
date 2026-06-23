@@ -1,7 +1,7 @@
 import os
 
 from chefs_helpers.chefs_helpers import get_chefs_form, get_form_cdogs_template, get_chefs_status, get_form_submissions, get_submission_attachments
-from chefs_helpers.constants import CHEFS_FORM_ID, CHEFS_TEST_SUBMISSION_ID, CHEFS_TEST_CONFIRMATION_ID
+from chefs_helpers.constants import CHEFS_TEST_FORM_ID, CHEFS_TEST_SUBMISSION_ID, CHEFS_TEST_CONFIRMATION_ID
 from utilities.file_helper import save_file
 
 def test_chefs_connection():
@@ -15,16 +15,16 @@ def test_chefs_connection():
 def test_chefs_form():
 
   # Get a CHEFS form instance
-  form_details = get_chefs_form(CHEFS_FORM_ID)
+  form_details = get_chefs_form(CHEFS_TEST_FORM_ID)
   assert form_details is not None
-  assert form_details.get("id") == CHEFS_FORM_ID
+  assert form_details.get("id") == CHEFS_TEST_FORM_ID
   # print("CHEFS form details:", form_details)
 
 
 def test_chefs_submission_searches():
 
   # Get CHEFS form submissions
-  submissions = get_form_submissions(CHEFS_FORM_ID)
+  submissions = get_form_submissions(CHEFS_TEST_FORM_ID)
   assert submissions is not None
   assert len(submissions) > 0
   print("CHEFS form submission count:", len(submissions))
@@ -47,7 +47,7 @@ def test_chefs_submission_searches():
 def test_chefs_cdogs_template():
 
   # Get a CHEFS form CDOGS template
-  template = get_form_cdogs_template(CHEFS_FORM_ID)
+  template = get_form_cdogs_template(CHEFS_TEST_FORM_ID)
   assert template is not None
   assert template.get("filename") is not None
   assert template.get("template") is not None
