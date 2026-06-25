@@ -1,7 +1,8 @@
-from jira_helpers.constants import JIRA_TEST_FILE_PATH, JIRA_TEST_ISSUE_KEY
+from jira_helpers.constants import JIRA_TEST_ISSUE_KEY
 from jira_helpers.jira_auth import get_jira_client
 from jira_helpers.jira_searches import get_jira_ticket
 from jira_helpers.jira_attachments import attachment_on_issue, add_attachment_to_issue, remove_attachment_from_issue
+import os
 
 def test_jira_attachments():
 
@@ -10,7 +11,8 @@ def test_jira_attachments():
   assert jira_client is not None, "Should get a valid JIRA client"
 
   # Setup for testing
-  JIRA_TEST_FILE_NAME = JIRA_TEST_FILE_PATH.split("/")[-1]
+  JIRA_TEST_FILE_PATH = os.getcwd() + "\\tests\\test_files\\Quick Test File.txt"
+  JIRA_TEST_FILE_NAME = JIRA_TEST_FILE_PATH.split("\\")[-1]
   try:
       # Get the test issue.
       issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
