@@ -45,5 +45,5 @@ def generate_cdogs_output():
     print("CDOGS output data downloaded to:", file_path)
 
 # generate_cdogs_template()
-generate_chefs_answer_data()
-generate_cdogs_output()
+# generate_chefs_answer_data()
+# generate_cdogs_output()
