@@ -19,5 +19,4 @@ JIRA_YOUNGER_THAN_MINUTES = int(os.getenv('JIRA_YOUNGER_THAN_MINUTES'))
 
 
 # ---- JIRA Test Constants ----
-JIRA_TEST_FILE_PATH = os.getenv('JIRA_TEST_FILE_PATH', '')
 JIRA_TEST_ISSUE_KEY = os.getenv('JIRA_TEST_ISSUE_KEY')

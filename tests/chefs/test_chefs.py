@@ -52,11 +52,8 @@ def test_chefs_cdogs_template():
   assert template.get("filename") is not None
   assert template.get("template") is not None
   assert template.get("template").get("data") is not None
-  if os.getenv('GITHUB_ACTIONS'):
-    print("CHEFS form template found:", template.get("filename"))
-  else:
-    file_path = save_file(template.get("filename"), template.get("template").get("data"))
-    print("CHEFS form template downloaded to:", file_path)
+  print("CHEFS form template found:", template.get("filename"))
+
 
 
 def test_chefs_submission_attachments():
