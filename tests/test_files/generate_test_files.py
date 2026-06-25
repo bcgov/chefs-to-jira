@@ -24,10 +24,10 @@ def generate_chefs_answer_data(s_id=CHEFS_TEST_SUBMISSION_ID):
 
 def generate_cdogs_output():
     # Get the test answers file
-    answers = load_file(os.getcwd() + "\\tests\\test_files\\chefs_test_answer_data.json").decode('utf-8')
+    answers = load_file(os.getcwd() + "/tests/test_files/chefs_test_answer_data.json").decode('utf-8')
 
     # Get test template file
-    template = load_file(os.getcwd() + "\\tests\\test_files\\minimal_cdogs_template.docx")
+    template = load_file(os.getcwd() + "/tests/test_files/minimal_cdogs_template.docx")
     template_b64_string = base64.b64encode(template).decode('utf-8')
 
     # generate the CDOGS output
@@ -40,7 +40,7 @@ def generate_cdogs_output():
         template_ext="docx"
     )
     # save the output to a file
-    file_path = save_file(os.getcwd() + "\\tests\\test_files\\test_cdogs_output.pdf", output)
+    file_path = save_file(os.getcwd() + "/tests/test_files/test_cdogs_output.pdf", output)
 
     print("CDOGS output data downloaded to:", file_path)
 
