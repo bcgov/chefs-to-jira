@@ -21,18 +21,22 @@ def get_chefs_status():
     return chefs_get_request("status")
 
 
-def get_chefs_form(form_id=CHEFS_FORM_ID):
-    # version specifies the currently published form version
-    return chefs_get_request(f"forms/{form_id}/version")
+def get_chefs_form(form_id=CHEFS_FORM_ID, form_version_id=None):
+    if form_version_id is None:
+      # version specifies the currently published form version
+      return chefs_get_request(f"forms/{form_id}/version")
+    else:
+      # specify the version
+      return chefs_get_request(f"forms/{form_id}/versions/{form_version_id}")
+
 
 
 # Gets all submissions for the most recent form version,
 # or a specific submission by ID or confirmation ID
 def get_form_submissions(form_id=CHEFS_FORM_ID, submission_id=None, confirmation_id=None):
     if submission_id:
-        submission = chefs_get_request(f"submissions/{submission_id}")
-        submission = submission.get("submission")
-        return submission
+        response = chefs_get_request(f"submissions/{submission_id}")
+        return response.get("submission")
     if confirmation_id:
         form = get_chefs_form(form_id)
         for version in form.get("versions"):

@@ -65,7 +65,7 @@ def generate_cdogs_document(answer_data, outfile_name: str, output_type: str, te
         "encodingType": template_encoding,
         "fileType": template_ext
     }
-    # Optionally support json as string
+    # Optionally support json answers as string
     if isinstance(answer_data, str):
         try:
             answer_data = json.loads(answer_data)

@@ -15,7 +15,7 @@ def get_jira_tickets_query(project, reporter, component=None, younger_than_minut
 
     # Search for issues created by CHEFS with the correct project and component
     JQL_query = (
-        f'request-channel-type = email AND '
+        # f'request-channel-type = email AND ' # DEV-OVERRIDE
         f'project = {jql_literal(project)} AND '
         f'created >= {jql_literal(cutoff_str)}'
     )
