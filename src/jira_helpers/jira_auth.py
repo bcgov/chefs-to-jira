@@ -1,5 +1,6 @@
 import jira
 from jira_helpers.constants import JIRA_API_URL, JIRA_CLIENT_ID, JIRA_CLIENT_EMAIL, JIRA_CLIENT_SECRET, JIRA_CLIENT_TOKEN
+from utilities.log_helper import LOGGER
 
 def get_jira_client():
     # Create a JIRA client instance.
@@ -22,8 +23,8 @@ def get_jira_client():
             )
 
         client = jira.JIRA(server=JIRA_API_URL, **auth_kwargs)
-        print(f"Successfully connected to JIRA API using {auth_source}")
+        LOGGER.info(f"Successfully connected to JIRA API using {auth_source}")
         return client
     except Exception as e:
-        print(f"Error connecting to JIRA API: {e}")
+        LOGGER.error(f"Error connecting to JIRA API: {e}")
         raise

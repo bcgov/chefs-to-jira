@@ -1,8 +1,10 @@
 from jira_helpers.constants import JIRA_TEST_ISSUE_KEY
 from jira_helpers.jira_auth import get_jira_client
 from jira_helpers.jira_searches import get_jira_ticket
-from jira_helpers.jira_attachments import attachment_on_issue, add_attachment_to_issue, remove_attachment_from_issue
+from jira_helpers.jira_updates import add_comment_to_issue, attachment_on_issue, add_attachment_to_issue, remove_attachment_from_issue
 import os
+
+from utilities.log_helper import LOGGER
 
 def test_jira_attachments():
 
@@ -18,7 +20,7 @@ def test_jira_attachments():
       issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
       assert issue is not None, "Should get a valid JIRA issue"
   except Exception as e:
-      print(f"Error setting up tests: {e}")
+      LOGGER.error(f"Error setting up tests: {e}")
       raise
 
   # Test the attachment functions
@@ -52,9 +54,31 @@ def test_jira_attachments():
       attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_NAME)
       assert attachment_found is False, "Should not be an attachment on the test ticket after testing"
 
-      print("✅ JIRA attachment tests successful")
+      LOGGER.info("✅ JIRA attachment tests successful")
   except Exception as e:
-      print(f"Error testing attachments for JIRA tickets: {e}")
+      LOGGER.error(f"Error testing attachments for JIRA tickets: {e}")
       raise
 
+def test_jira_comments():
+    # Get a JIRA client instance
+    jira_client = get_jira_client()
+    assert jira_client is not None, "Should get a valid JIRA client"
+
+    # Get the test issue.
+    issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
+    assert issue is not None, "Should get a valid JIRA issue"
+
+    # Test adding a comment to the issue
+    test_comment = "This is a test comment for the JIRA ticket."
+    comment_added = add_comment_to_issue(jira_client, issue, test_comment)
+    assert comment_added is True, "Should have positive return of comment add"
+
+    # Verify that the comment was added
+    issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
+    comments = [comment.body for comment in issue.fields.comment.comments]
+    assert test_comment in comments, "The test comment should be present in the issue's comments"
+
+    LOGGER.info("✅ JIRA add comment test successful")
+
 test_jira_attachments()
+test_jira_comments()

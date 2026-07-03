@@ -1,6 +1,7 @@
 from jira_helpers.constants import JIRA_PROJECT, JIRA_COMPONENT, JIRA_TEST_ISSUE_KEY
 from jira_helpers.jira_auth import get_jira_client
 from jira_helpers.jira_searches import get_jira_tickets, get_jira_tickets_query, get_jira_ticket
+from utilities.log_helper import LOGGER
 
 def test_jira_searches():
   """Test that we can search for JIRA tickets and retrieve them successfully"""
@@ -22,10 +23,10 @@ def test_jira_searches():
           print(f"Generated JQL queries for debugging: {expanded_query}")
       assert issues is not None, "Should be able to find some JIRA issues"
       if issues:
-          print(f"✅ JIRA search successful - Found {len(issues)} issues matching criteria.")
+          LOGGER.info(f"✅ JIRA search successful - Found {len(issues)} issues matching criteria.")
 
   except Exception as e:
-      print(f"❌ Error searching for JIRA tickets: {e}")
+      LOGGER.error(f"❌ Error searching for JIRA tickets: {e}")
       raise
 
   # Test field retrieval from an issue
@@ -33,24 +34,24 @@ def test_jira_searches():
       issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
       assert issue is not None, "Should get a valid JIRA issue"
 
-      print(f"✅ JIRA ticket retrieval successful - Retrieved issue {issue.key}")
+      LOGGER.info(f"✅ JIRA ticket retrieval successful - Retrieved issue {issue.key}")
 
       # Did some advance scouting for functionality we might want to use in the future.
       # Leaving these prints in for now.
       # We can remove them later if they aren't useful.
       print_debugs=False
       if print_debugs:
-        print(f"Issue summary: {issue.fields.summary}")
-        print(f"Issue reporter: {issue.fields.reporter.displayName}")
-        print(f"Issue components: {[component.name for component in issue.fields.components]}")
-        print(f"Issue assignee: {issue.fields.assignee.displayName if issue.fields.assignee else 'Unassigned'}  ")
-        print(f"Issue Labels: {issue.fields.labels}")
-        print(f"Issue Ticket History:")
+        LOGGER.info(f"Issue summary: {issue.fields.summary}")
+        LOGGER.info(f"Issue reporter: {issue.fields.reporter.displayName}")
+        LOGGER.info(f"Issue components: {[component.name for component in issue.fields.components]}")
+        LOGGER.info(f"Issue assignee: {issue.fields.assignee.displayName if issue.fields.assignee else 'Unassigned'}  ")
+        LOGGER.info(f"Issue Labels: {issue.fields.labels}")
+        LOGGER.info(f"Issue Ticket History:")
         for history in issue.changelog.histories:
             if history.items and len(history.items) > 0:
-                print(f"{history.created} - {history.author.displayName}: {history.items[0].field} changed to {history.items[0].toString}")
+                LOGGER.info(f"{history.created} - {history.author.displayName}: {history.items[0].field} changed to {history.items[0].toString}")
   except Exception as e:
-      print(f"❌ Error fetching JIRA ticket: {e}")
+      LOGGER.error(f"❌ Error fetching JIRA ticket: {e}")
       raise
 
 test_jira_searches()

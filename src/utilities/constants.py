@@ -12,3 +12,6 @@ FROM_EMAIL = os.getenv('FROM_EMAIL', '')
 
 # ---- File Helper ----
 TEMP_DIR = os.getenv('TEMP_DIR', '/tmp')
+
+# ---- Logging Helper ----
+LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')

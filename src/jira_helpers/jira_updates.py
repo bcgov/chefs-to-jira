@@ -1,5 +1,6 @@
 from jira.resources import Issue
 from io import BytesIO
+from utilities.log_helper import LOGGER
 
 # Compares a file to the attachments on a JIRA issue. Returns true if a match is found, false if not.
 def attachment_on_issue(issue: Issue, file_name: str) -> bool:
@@ -11,7 +12,7 @@ def attachment_on_issue(issue: Issue, file_name: str) -> bool:
                 return True
         # print(f"Attachment {file_name} not found on issue {issue.key}")
     except Exception as e:
-        print(f"Error occurred while checking attachment: {e}")
+        LOGGER.error(f"Error occurred while checking attachment: {e}")
     return False
 
 # Upload an attachment to a JIRA issue. Returns true if the attachment was successfully added, false if not.
@@ -25,7 +26,7 @@ def add_attachment_to_issue(client, issue: Issue, file: str|object) -> bool:
           client.add_attachment(issue=issue, attachment=memory_file, filename=file.get("filename"))
           return True
     except Exception as e:
-        print(f"Error occurred while adding attachment: {e}")
+        LOGGER.error(f"Error occurred while adding attachment: {e}")
     return False
 
 # Remove an attachment from a JIRA issue by file name. Returns true if the attachment was successfully removed, false if not.
@@ -39,5 +40,13 @@ def remove_attachment_from_issue(issue: Issue, file_name: str) -> bool:
                 return True
         # print(f"Attachment {file_name} not found on issue {issue.key}")
     except Exception as e:
-        print(f"Error occurred while removing attachment: {e}")
+        LOGGER.error(f"Error occurred while removing attachment: {e}")
+    return False
+
+def add_comment_to_issue(client, issue: Issue, comment: str) -> bool:
+    try:
+        result = client.add_comment(issue=issue, body=comment, is_internal=True)
+        return result is not None
+    except Exception as e:
+        LOGGER.error(f"Error occurred while adding comment: {e}")
     return False

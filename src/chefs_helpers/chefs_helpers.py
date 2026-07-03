@@ -1,5 +1,6 @@
 from chefs_helpers.constants import CHEFS_FORM_ID, CHEFS_API_KEY,CHEFS_API_BASE_URL, CHEFS_FORM_ATTACHMENT_FIELD_NAME
 import requests
+from utilities.log_helper import LOGGER
 
 def chefs_get_request(path_parameters):
     url = f"{CHEFS_API_BASE_URL}/{path_parameters}"
@@ -14,7 +15,7 @@ def chefs_get_request(path_parameters):
           return response.content
 
     except requests.exceptions.RequestException as e:
-        print(f"Error connecting to CHEFS API {path_parameters}: {e}")
+        LOGGER.error(f"Error connecting to CHEFS API {path_parameters}: {e}")
         raise
 
 def get_chefs_status():
