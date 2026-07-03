@@ -13,3 +13,9 @@ This repository contains files relating to a new project. It is early developmen
 ## Credits
 
 This repository contains components from bcgov/quickstart-openshift, bcgov/quickstart-openshift-backends, and bcgov/copilot-instructions
+
+## Library/Module/API Documentation
+
+CHEFS API - https://submit.digital.gov.bc.ca/app/api/v1/docs
+CDOGS API - https://cdogs.api.gov.bc.ca/api/v2/docs
+JIRA API - https://jira.readthedocs.io/api.html

@@ -3,6 +3,8 @@ import json
 import requests
 import time
 
+from utilities.log_helper import LOGGER
+
 _TOKEN_CACHE = {
     "access_token": None,
     "expires_at": 0,  # epoch seconds
@@ -29,7 +31,7 @@ def get_cdogs_token(refresh_skew_seconds: int = 30) -> str:
         "Content-Type": "application/x-www-form-urlencoded"
     }
 
-    print("Refreshing CDOGS token…")
+    LOGGER.info("Refreshing CDOGS token…")
     response = requests.post(
         CDOGS_LOGIN_PROXY,
         data=body,
@@ -45,6 +47,7 @@ def get_cdogs_token(refresh_skew_seconds: int = 30) -> str:
     expires_in = data.get("expires_in")
 
     if not access_token or not expires_in:
+        LOGGER.error("Invalid token response from login proxy")
         raise RuntimeError("Invalid token response from login proxy")
 
     # ✅ Cache token + expiry
@@ -65,12 +68,13 @@ def generate_cdogs_document(answer_data, outfile_name: str, output_type: str, te
         "encodingType": template_encoding,
         "fileType": template_ext
     }
-    # Optionally support json as string
+    # Optionally support json answers as string
     if isinstance(answer_data, str):
         try:
             answer_data = json.loads(answer_data)
         except json.JSONDecodeError as e:
-            pass
+            LOGGER.error(f"❌ Error decoding JSON answer data: {e}")
+            return False
     body = {
         "data": answer_data,
         "options": options,
@@ -85,5 +89,5 @@ def generate_cdogs_document(answer_data, outfile_name: str, output_type: str, te
         return response.content
 
     except requests.exceptions.RequestException as e:
-        print(f"Error connecting to CDOGS API {url}: {e}")
+        LOGGER.error(f"Error connecting to CDOGS API {url}: {e}")
         raise

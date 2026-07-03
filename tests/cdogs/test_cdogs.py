@@ -17,6 +17,9 @@ def test_generate_cdogs_document():
 
     # Get template file
     template = load_file(os.getcwd() + "/tests/test_files/minimal_cdogs_template.docx")
+    # Load file turns the docx into "bytes"
+    # b64encode takes bytes, encodes them to base64, and ouputs bytes
+    # decode takes bytes (assuming they're utf-8) and outputs a base64 string
     template_b64_string = base64.b64encode(template).decode('utf-8')
 
     try:

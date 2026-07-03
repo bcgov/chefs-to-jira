@@ -1,6 +1,7 @@
 import datetime
 from jira.client import ResultList
 from jira.resources import Issue
+from utilities.log_helper import LOGGER
 
 
 def jql_literal(s: str) -> str:
@@ -15,7 +16,7 @@ def get_jira_tickets_query(project, reporter, component=None, younger_than_minut
 
     # Search for issues created by CHEFS with the correct project and component
     JQL_query = (
-        f'request-channel-type = email AND '
+        # f'request-channel-type = email AND ' # DEV-OVERRIDE
         f'project = {jql_literal(project)} AND '
         f'created >= {jql_literal(cutoff_str)}'
     )
@@ -33,7 +34,7 @@ def get_jira_tickets(client, JQL_query):
     try:
         issues: ResultList[Issue] = client.search_issues(JQL_query, maxResults=5, expand='changelog')
     except Exception as e:
-        print(f"Error searching for JIRA tickets: {e}")
+        LOGGER.error(f"Error searching for JIRA tickets: {e}")
         raise
 
     return issues
@@ -44,6 +45,18 @@ def get_jira_ticket(client, issue_key):
         issue = client.issue(issue_key, expand='changelog')
         return issue
     except Exception as e:
-        print(f"Error fetching JIRA ticket {issue_key}: {e}")
+        LOGGER.error(f"Error fetching JIRA ticket {issue_key}: {e}")
         raise
 
+
+def get_jira_comments(issue):
+
+    try:
+        comments = []
+        if issue.fields.comment is not None:
+            for comment in issue.fields.comment.comments:
+                comments.append(comment.body)
+        return comments
+    except Exception as e:
+        LOGGER.error(f"Error fetching JIRA comments for {issue.id}: {e}")
+        raise
