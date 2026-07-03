@@ -12,4 +12,4 @@ CDOGS_APP_ID = os.getenv('CDOGS_APP_ID', '')
 CDOGS_LOGIN_PROXY = os.getenv('CDOGS_LOGIN_PROXY', '')
 CDOGS_API_BASE_URL = os.getenv('CDOGS_API_BASE_URL', '')
 
-OUTPUT_TYPE = os.getenv('OUTPUT_TYPE', 'pdf')
+CDOGS_OUTPUT_TYPE = os.getenv('CDOGS_OUTPUT_TYPE', 'pdf')

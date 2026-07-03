@@ -1,13 +1,13 @@
 
 from cdogs_helpers.cdogs_helpers import generate_cdogs_document
-from cdogs_helpers.constants import OUTPUT_TYPE
+from cdogs_helpers.constants import CDOGS_OUTPUT_TYPE
 
 from chefs_helpers.chefs_helpers import get_chefs_form, get_form_submissions, get_submission_attachments, get_form_cdogs_template
 
 from jira_helpers.constants import JIRA_PROJECT, JIRA_COMPONENT
 from jira_helpers.jira_auth import get_jira_client
 from jira_helpers.jira_updates import attachment_on_issue, add_attachment_to_issue, add_comment_to_issue
-from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query, get_jira_ticket
+from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query
 
 from utilities.send_admin_email import send_admin_email
 from utilities.log_helper import LOGGER, get_logs
@@ -102,7 +102,7 @@ for issue in issues:
   if cdogs_template is not None:
     try:
       template_outfile_name = cdogs_template.get("filename")
-      output_type=OUTPUT_TYPE
+      output_type=CDOGS_OUTPUT_TYPE
       output_name_no_extension=Path(template_outfile_name).stem
       outfile_name=f"{output_name_no_extension}.{output_type}"
 
