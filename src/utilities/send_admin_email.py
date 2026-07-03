@@ -6,10 +6,11 @@ from email.mime.text import MIMEText
 from . import constants
 
 def send_admin_email(message_detail):
+
     msg = MIMEMultipart("related")
     msg["Subject"] = "Chefs-to-JIRA Script Report"
     msg["To"] = constants.DEBUG_EMAIL
-    msg["From"] = constants.DEBUG_EMAIL
+    msg["From"] = constants.FROM_EMAIL
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     host_name = socket.gethostname()

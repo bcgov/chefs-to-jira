@@ -10,15 +10,13 @@ from jira_helpers.jira_updates import attachment_on_issue, add_attachment_to_iss
 from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query, get_jira_ticket
 
 from utilities.send_admin_email import send_admin_email
-from utilities.log_helper import LOGGER
+from utilities.log_helper import LOGGER, get_logs
 
 from base64 import b64encode
 from json import dumps
 from pathlib import Path
 import re
 
-
-send_admin_email("Chefs-to-JIRA script started!")
 LOGGER.debug("LOGGER - Chefs-to-JIRA script Started!")
 
 # 1. Check JIRA for new submissions
@@ -157,8 +155,9 @@ for issue in issues:
 
 # === 11. Update ticket with a mark that the ticket was pre-populated by Chefs-To-Jira ===
   add_comment_to_issue(jira_client, issue, completion_text)
-  LOGGER.debug(f"Chefs-to-JIRA script completed for issue {issue.key}!")
+  LOGGER.debug(f"Chefs-to-JIRA script completed issue {issue.key}!")
 
 # === 12. Optionally notify OPTIMIZE of PIA creation. ===
-send_admin_email("Chefs-to-JIRA script finished!")
+log_string = "<br />".join(get_logs())
+send_admin_email(f"Log output:<br />{log_string}")
 LOGGER.debug("LOGGER - Chefs-to-JIRA script finished!")
