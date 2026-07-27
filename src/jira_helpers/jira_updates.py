@@ -1,6 +1,7 @@
 from jira.resources import Issue
 from io import BytesIO
 from utilities.log_helper import LOGGER
+from jira_helpers.jira_searches import get_jira_comments
 
 # Compares a file to the attachments on a JIRA issue. Returns true if a match is found, false if not.
 def attachment_on_issue(issue: Issue, file_name: str) -> bool:
@@ -50,3 +51,8 @@ def add_comment_to_issue(client, issue: Issue, comment: str) -> bool:
     except Exception as e:
         LOGGER.error(f"Error occurred while adding comment: {e}")
     return False
+
+# Add a comment to a JIRA issue if that issue does not already contain the comment.
+def add_comment_to_issue_if_missing(jira_client, issue, error_text):
+  if error_text not in get_jira_comments(issue):
+    add_comment_to_issue(jira_client, issue, error_text)

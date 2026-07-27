@@ -9,17 +9,19 @@ def jql_literal(s: str) -> str:
     """This is mostly important for the Component field, which has a trailing space in the value."""
     return f'"{s}"'
 
-def get_jira_tickets_query(project, reporter, component=None, younger_than_minutes=10080):
+def get_jira_tickets_query(project, reporter, component=None, younger_than_minutes=10080, summary_prefix:str = ""):
     # Calculate the cutoff date for issues created within the last younger_than_minutes
     cutoff = datetime.datetime.now() - datetime.timedelta(minutes=younger_than_minutes)
     cutoff_str = cutoff.strftime("%Y-%m-%d %H:%M")
 
     # Search for issues created by CHEFS with the correct project and component
     JQL_query = (
-        # f'request-channel-type = email AND ' # DEV-OVERRIDE
+        f'request-channel-type = email AND '
         f'project = {jql_literal(project)} AND '
         f'created >= {jql_literal(cutoff_str)}'
     )
+    if summary_prefix:
+        JQL_query = f'{JQL_query} AND SUMMARY ~ "{summary_prefix}%"'
 
     if reporter:
         JQL_query += f' AND reporter = {jql_literal(reporter)}'
@@ -32,7 +34,7 @@ def get_jira_tickets_query(project, reporter, component=None, younger_than_minut
 def get_jira_tickets(client, JQL_query):
 
     try:
-        issues: ResultList[Issue] = client.search_issues(JQL_query, maxResults=5, expand='changelog')
+        issues: ResultList[Issue] = client.search_issues(JQL_query, maxResults=50, expand='changelog')
     except Exception as e:
         LOGGER.error(f"Error searching for JIRA tickets: {e}")
         raise
