@@ -4,9 +4,9 @@ from cdogs_helpers.constants import CDOGS_OUTPUT_TYPE
 
 from chefs_helpers.chefs_helpers import get_chefs_form, get_form_submissions, get_submission_attachments, get_form_cdogs_template
 
-from jira_helpers.constants import JIRA_PROJECT, JIRA_COMPONENT
+from jira_helpers.constants import JIRA_PROJECT, JIRA_COMPONENT, JIRA_YOUNGER_THAN_MINUTES, JIRA_SUMMARY_FILTER
 from jira_helpers.jira_auth import get_jira_client
-from jira_helpers.jira_updates import attachment_on_issue, add_attachment_to_issue, add_comment_to_issue
+from jira_helpers.jira_updates import attachment_on_issue, add_attachment_to_issue, add_comment_to_issue, add_comment_to_issue_if_missing
 from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query
 
 from utilities.send_admin_email import send_admin_email
@@ -43,9 +43,10 @@ except Exception as e:
 
 # Get the new issues
 try:
+  jql = get_jira_tickets_query(JIRA_PROJECT, reporter="donotreplyCHEFS@gov.bc.ca", component=JIRA_COMPONENT, younger_than_minutes=JIRA_YOUNGER_THAN_MINUTES, summary_prefix=JIRA_SUMMARY_FILTER)
+
+  # DEV-OVERRIDE (gives quick access to a wide variety of JIRA tickets):
   # jql = get_jira_tickets_query(JIRA_PROJECT, reporter="PPLATTEN", younger_than_minutes=180080)
-  # DEV-OVERRIDE:
-  jql = get_jira_tickets_query(JIRA_PROJECT, reporter="donotreplyCHEFS@gov.bc.ca", component=JIRA_COMPONENT, younger_than_minutes=80080)
   issues = get_jira_tickets(jira_client, jql)
 except Exception as e:
   LOGGER.error(f"❌ Error searching for JIRA tickets: {e}")
@@ -60,6 +61,7 @@ for issue in issues:
     continue
 
 # === 2. Get submission attachments from CHEFS ===
+  # The CHEFS Body that JIRA Automation uses to populate the JIRA Ticket includes a link to view the submission:
   submission_pattern = "view\?s=([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})]"
   result = re.findall(submission_pattern, issue.fields.description)
   submission_id = ""
@@ -85,6 +87,8 @@ for issue in issues:
         try:
           add_attachment_to_issue(jira_client, issue, attachment)
         except Exception as e:
+          comment_error_text="Chefs-To-Jira failed to upload an attachment to this ticket. Check CHEFS for the missing attachment."
+          add_comment_to_issue_if_missing(jira_client, issue, comment_error_text)
           LOGGER.error(f"❌ Error adding attachment to JIRA tickets: {e}")
 
 # === 4. Get the version of the form that created the submission ===
@@ -132,6 +136,8 @@ for issue in issues:
         try:
           add_attachment_to_issue(jira_client, issue, file)
         except Exception as e:
+          comment_error_text="Chefs-To-Jira failed to upload an attachment to this ticket. Check CHEFS for the missing attachment."
+          add_comment_to_issue_if_missing(jira_client, issue, comment_error_text)
           LOGGER.error(f"❌ Error adding cdogs template to JIRA tickets: {e}")
     except Exception as e:
       LOGGER.error(f"❌ Error occurred generating cdogs output file: {e}")
