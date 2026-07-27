@@ -58,14 +58,17 @@ jobs:
 
           JIRA_COMPONENT: ${{ vars.JIRA_COMPONENT }}
           JIRA_PROJECT: ${{ vars.JIRA_PROJECT }}
+          JIRA_SUMMARY_FILTER: ${{ vars.JIRA_SUMMARY_FILTER }}
+          JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
+
           JIRA_TEST_FILE_PATH: ${{ vars.JIRA_TEST_FILE_PATH }}
           JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
-          JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
 
           DEBUG_EMAIL: ${{ secrets.DEBUG_EMAIL }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
 
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
+          TEMP_DIR: ${{ vars.TEMP_DIR }}
           LOG_LEVEL: ${{ vars.LOG_LEVEL }}
 
         run: |
