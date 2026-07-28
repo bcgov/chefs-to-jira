@@ -48,7 +48,7 @@ def get_cdogs_token(refresh_skew_seconds: int = 30) -> str:
 
     if not access_token or not expires_in:
         LOGGER.error("Invalid token response from login proxy")
-        raise RuntimeError("Invalid token response from login proxy")
+        raise RuntimeError("Invalid token response from cdogs login proxy")
 
     # ✅ Cache token + expiry
     _TOKEN_CACHE["access_token"] = access_token

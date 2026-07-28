@@ -2,7 +2,7 @@ name: Chefs to JIRA Sync
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -64,10 +64,6 @@ jobs:
           JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
           JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
 
-          DEBUG_EMAIL: ${{ secrets.DEBUG_EMAIL }}
-          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-
-          FROM_EMAIL: ${{ vars.FROM_EMAIL }}
           LOG_LEVEL: ${{ vars.LOG_LEVEL }}
 
         run: |

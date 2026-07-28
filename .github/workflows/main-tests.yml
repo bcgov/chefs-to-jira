@@ -64,10 +64,6 @@ jobs:
           JIRA_TEST_FILE_PATH: ${{ vars.JIRA_TEST_FILE_PATH }}
           JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
 
-          DEBUG_EMAIL: ${{ secrets.DEBUG_EMAIL }}
-          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-
-          FROM_EMAIL: ${{ vars.FROM_EMAIL }}
           TEMP_DIR: ${{ vars.TEMP_DIR }}
           LOG_LEVEL: ${{ vars.LOG_LEVEL }}
 
