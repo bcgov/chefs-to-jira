@@ -80,5 +80,6 @@ def test_jira_comments():
 
     LOGGER.info("✅ JIRA add comment test successful")
 
-test_jira_attachments()
-test_jira_comments()
+if __name__ == "__main__":
+    test_jira_attachments()
+    test_jira_comments()

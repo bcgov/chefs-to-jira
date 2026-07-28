@@ -73,10 +73,11 @@ def test_chefs_submission_attachments():
       file_path = save_file(attachment.get("filename"), attachment.get("data"))
       print("CHEFS attachment downloaded to:", file_path)
 
-test_chefs_connection()
-test_chefs_form()
-test_chefs_submission_searches()
-test_chefs_cdogs_template()
-test_chefs_submission_attachments()
+if __name__ == "__main__":
+    test_chefs_connection()
+    test_chefs_form()
+    test_chefs_submission_searches()
+    test_chefs_cdogs_template()
+    test_chefs_submission_attachments()
 
 

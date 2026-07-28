@@ -54,4 +54,5 @@ def test_jira_searches():
       LOGGER.error(f"❌ Error fetching JIRA ticket: {e}")
       raise
 
-test_jira_searches()
+if __name__ == "__main__":
+    test_jira_searches()
