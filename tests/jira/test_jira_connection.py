@@ -18,4 +18,5 @@ def test_jira_connection():
     # Print for visibility (optional)
     print(f"✅ JIRA connection successful - Connected and found {len(project_keys)} project keys.")
 
-test_jira_connection()
+if __name__ == "__main__":
+    test_jira_connection()

@@ -38,5 +38,6 @@ def test_generate_cdogs_document():
     except Exception as e:
         print(f"❌ Error occurred: {e}")
 
-test_get_cdogs_token()
-test_generate_cdogs_document()
+if __name__ == "__main__":
+    test_get_cdogs_token()
+    test_generate_cdogs_document()

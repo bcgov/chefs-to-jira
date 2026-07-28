@@ -1,0 +1,74 @@
+name: Chefs to JIRA Sync
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    environment: main
+    concurrency:
+      group: chefs-to-jira
+      cancel-in-progress: true
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ vars.PRODUCTION_REF }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create false
+
+      - name: Install Dependencies
+        run: |
+          poetry install --with dev
+
+      - name: Run Sync Script
+        env:
+          CDOGS_API_BASE_URL: ${{ secrets.CDOGS_API_BASE_URL }}
+          CDOGS_APP_ID: ${{ secrets.CDOGS_APP_ID }}
+          CDOGS_CLIENT_ID: ${{ secrets.CDOGS_CLIENT_ID }}
+          CDOGS_CLIENT_SECRET: ${{ secrets.CDOGS_CLIENT_SECRET }}
+          CDOGS_LOGIN_PROXY: ${{ secrets.CDOGS_LOGIN_PROXY }}
+
+          CDOGS_OUTPUT_TYPE: ${{ vars.CDOGS_OUTPUT_TYPE }}
+
+          CHEFS_API_KEY: ${{ secrets.CHEFS_API_KEY }}
+          CHEFS_FORM_ID: ${{ secrets.CHEFS_FORM_ID }}
+          CHEFS_TEST_CONFIRMATION_ID: ${{ secrets.CHEFS_TEST_CONFIRMATION_ID }}
+          CHEFS_TEST_SUBMISSION_ID: ${{ secrets.CHEFS_TEST_SUBMISSION_ID }}
+
+          CHEFS_API_BASE_URL: ${{ vars.CHEFS_API_BASE_URL }}
+
+          JIRA_API_URL: ${{ secrets.JIRA_API_URL }}
+          JIRA_CLIENT_EMAIL: ${{ secrets.JIRA_CLIENT_EMAIL }}
+          JIRA_CLIENT_ID: ${{ secrets.JIRA_CLIENT_ID }}
+          JIRA_CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
+
+          JIRA_COMPONENT: ${{ vars.JIRA_COMPONENT }}
+          JIRA_PROJECT: ${{ vars.JIRA_PROJECT }}
+          JIRA_TEST_FILE_PATH: ${{ vars.JIRA_TEST_FILE_PATH }}
+          JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
+          JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
+
+          DEBUG_EMAIL: ${{ secrets.DEBUG_EMAIL }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+
+          FROM_EMAIL: ${{ vars.FROM_EMAIL }}
+          LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+
+        run: |
+          python src/main.py
