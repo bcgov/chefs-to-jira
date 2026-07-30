@@ -30,7 +30,6 @@ LOGGER.debug("LOGGER - Chefs-to-JIRA script Started!")
 #   9. Parse the form questions for JIRA field and answer mapping
 #   10. Update JIRA ticket with CHEFS answers
 #   11. Update ticket with a mark that the ticket was pre-populated by Chefs-To-Jira
-#   12. Optionally notify OPTIMIZE of PIA creation.
 
 # === 1. Check JIRA for new submissions ===
 # Get a JIRA client instance
@@ -42,7 +41,15 @@ except Exception as e:
 
 # Get the new issues
 try:
-  jql = get_jira_tickets_query(JIRA_PROJECT, reporter="donotreplyCHEFS@gov.bc.ca", component=JIRA_COMPONENT, younger_than_minutes=JIRA_YOUNGER_THAN_MINUTES, summary_prefix=JIRA_SUMMARY_FILTER)
+  jql_kwargs = {
+    "reporter": "donotreplyCHEFS@gov.bc.ca",
+    "younger_than_minutes": JIRA_YOUNGER_THAN_MINUTES,
+  }
+  if JIRA_COMPONENT:
+    jql_kwargs["component"] = JIRA_COMPONENT
+  if JIRA_SUMMARY_FILTER:
+    jql_kwargs["summary_prefix"] = JIRA_SUMMARY_FILTER
+  jql = get_jira_tickets_query(JIRA_PROJECT, **jql_kwargs)
 
   # DEV-OVERRIDE (gives quick access to a wide variety of JIRA tickets):
   # jql = get_jira_tickets_query(JIRA_PROJECT, reporter="PPLATTEN", younger_than_minutes=180080)
@@ -162,7 +169,4 @@ for issue in issues:
   add_comment_to_issue(jira_client, issue, completion_text)
   LOGGER.debug(f"Chefs-to-JIRA script completed issue {issue.key}!")
 
-# === 12. Optionally notify OPTIMIZE of PIA creation. ===
-log_string = "<br />".join(get_logs())
-LOGGER.debug(f"Log output:<br />{log_string}")
 LOGGER.debug("LOGGER - Chefs-to-JIRA script finished!")
