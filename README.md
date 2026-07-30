@@ -10,90 +10,92 @@
 
 This repository facilitates populating on prem JIRA tickets using CHEFS submissions.
 
+## How it works
+
 When CHEFS submits it sends an email. The JIRA Project has Email Requests configured so that when it receives an email a new ticket is created.
 
 The github action "sync.yml" uses github environment variables to run on a schedule. It calls main.py, which contains the bulk of the projects logic. The script:
 
-### 1. Checks JIRA for new submissions
+1. Checks JIRA for new submissions
 
-### For each found submission that still requires work:
+   For each found submission that still requires work:
 
-### 2. Gets submission attachments from CHEFS.
+2. Gets submission attachments from CHEFS.
 
-### 3. Uses the CHEFS CDOGS Template to generate a CDOGS document using the submission answers.
+3. Uses the CHEFS CDOGS Template to generate a CDOGS document using the submission answers.
 
-### 4. For each CHEFS form question it checks for configuration mapping the answer to a JIRA field.
+4. For each CHEFS form question it checks for configuration mapping the answer to a JIRA field.
 
-### 5. Updates JIRA ticket with CDOGS PDF/Word attachment, CHEFS answers (as configured), and adds any CHEFS user-submitted attachments.
+5. Updates JIRA ticket with CDOGS PDF/Word attachment, CHEFS answers (as configured), and adds any CHEFS user-submitted attachments.
 
-### 6. Comments on the ticket that the ticket was pre-populated by Chefs-To-Jira
+6. Comments on the ticket that the ticket was pre-populated by Chefs-To-Jira
 
 ## Requirements
 
 The following things are needed to deploy this to a new environment:
 
-### A service account account with JIRA Credentials with API read/write permission.
+- A service account account with JIRA Credentials with API read/write permission.
 
-### JIRA Project Email Requests configured to generate new tickets when an email is received from the CHEFS submission. (This can use the email protocol Microsoft Graph API)
+- JIRA Project Email Requests configured to generate new tickets when an email is received from the CHEFS submission. (This can use the email protocol Microsoft Graph API)
 
-### A CHEFS form with API integration enabled, and its API Key
+- A CHEFS form with API integration enabled, and its API Key
 
 ## Setup
 
 This project can be fairly quickly rolled out to new business areas given they meet the requirements. The process for doing so is:
 
-### Create a new Environment in this project (i.e. prod-JIRAPROJECT). The environment variables specify:
+1. Create a new Environment in this project (i.e. prod-JIRAPROJECT). The environment variables specify:
 
-#### Which Chefs-to-Jira Github Branch and Commit to use
+- Which Chefs-to-Jira Github Branch and Commit to use
 
-#### Which CDOGS, CHEFS, and JIRA to connect to and their credentials
+- Which CDOGS, CHEFS, and JIRA to connect to and their credentials
 
-#### Which JIRA Project, and optionally component to look for submissions for.
+- Which JIRA Project, and optionally component to look for submissions for.
 
-### Create a new sync.yml (i.e. .github/workflows/sync-JIRAPROJECT.yml). The sync.yml specifies:
+2. Create a new sync.yml (i.e. .github/workflows/sync-JIRAPROJECT.yml). The sync.yml specifies:
 
-#### The github environment to get configuration from
+- The github environment to get configuration from
 
-#### Frequency of checks
+- Frequency of checks
 
 ## Code Layout
 
-### .github/workflows contains configuration required to host this application in github.
+- .github/workflows contains configuration required to host this application in github.
 
-### src folder contains all production code
+- src folder contains all production code
 
-#### main.py contains the script which does the work. References \*\_helpers heavily.
+- src/main.py contains the script which does the work. References \*\_helpers heavily.
 
-#### utilities folder contains logging and file functions used mostly in automated testing.
+- src/utilities folder contains logging and file functions used mostly in automated testing.
 
-#### \*\_helpers folders contain functions which provide specific functionality for that API.
+- src/\*\_helpers folders contain functions which provide specific functionality for that API.
 
-### tests folder contains automated testing support, and has a seperate readme.
+- tests folder contains automated testing support, heavily referencing src, and has a seperate readme.
 
 ## Credits
 
-#### Peter Platten and Heather Hay were primary developers, additionally
+- Peter Platten and Heather Hay were primary developers, additionally
 
-#### The Optimize Team's Service Designers (Chris Stewart, Kiera Wilkinson, Harsha Kalra) gathered user requirements from the WLRS Privacy Team.
+- The Optimize Team's Service Designers (Chris Stewart, Kiera Wilkinson, Harsha Kalra) gathered user requirements from the WLRS Privacy Team.
 
-#### Product Owner Bonny Hastings provided leadership and connections
+- Product Owner Bonny Hastings provided leadership and connections
 
-#### Derek Roberts shared Git knowledge, and advice on modern practices and AI use in development
+- Derek Roberts shared Git knowledge, and advice on modern practices and AI use in development
 
-#### Paul Goodman was key with onboarding to the JIRA API
+- Paul Goodman was key with onboarding to the JIRA API
 
-#### Gary Wong and Jason Sherman assisted with onboarding to CHEFS/CDOGS, and discovery around ESS.
+- Gary Wong and Jason Sherman assisted with onboarding to CHEFS/CDOGS, and discovery around ESS.
 
-#### The Kilo code plugin for VS Code generated quite a lot of code - always reviewed and tested by a developer.
+- The Kilo code plugin for VS Code generated quite a lot of code - always reviewed and tested by a developer.
 
-#### This repository contains components from bcgov/quickstart-openshift, bcgov/quickstart-openshift-backends, and bcgov/copilot-instructions
+- This repository contains components from bcgov/quickstart-openshift, bcgov/quickstart-openshift-backends, and bcgov/copilot-instructions
 
 ## Library/Module/API Documentation
 
-### CHEFS API - https://submit.digital.gov.bc.ca/app/api/v1/docs
+- CHEFS API - https://submit.digital.gov.bc.ca/app/api/v1/docs
 
-### CDOGS API - https://cdogs.api.gov.bc.ca/api/v2/docs
+- CDOGS API - https://cdogs.api.gov.bc.ca/api/v2/docs
 
-### JIRA API - https://jira.readthedocs.io/api.html
+- JIRA API - https://jira.readthedocs.io/api.html
 
-### Github Actions - https://docs.github.com/en/actions
+- Github Actions - https://docs.github.com/en/actions
