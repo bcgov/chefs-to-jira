@@ -36,22 +36,22 @@ jobs:
       - name: Clean up successful runs
         if: github.event_name == 'schedule' || github.event.inputs.mode == 'successful'
         run: |
-          REMAINING=$(gh run list --json databaseId,conclusion,workflowName --jq '
-            [.[] | select(.conclusion == "success")]
+          REMAINING=$(gh run list --json databaseId,conclusion,workflowName --jq "
+            [.[] | select(.conclusion == \"success\" and .databaseId != ${{ github.run_id }})]
             | group_by(.workflowName)
             | map(sort_by(.databaseId) | reverse | .[5:] | map(.databaseId))
             | map(length) | add // 0
-          ')
+          ")
           if [ "$REMAINING" -eq 0 ]; then
             echo "No successful runs to delete."
           else
             echo "Deleting $REMAINING successful run(s), keeping the last 5 per workflow..."
-            gh run list --json databaseId,conclusion,workflowName --jq '
-              [.[] | select(.conclusion == "success")]
+            gh run list --json databaseId,conclusion,workflowName --jq "
+              [.[] | select(.conclusion == \"success\" and .databaseId != ${{ github.run_id }})]
               | group_by(.workflowName)
               | map(sort_by(.databaseId) | reverse | .[5:] | map(.databaseId))
               | flatten[]
-            ' | while read -r id; do
+            " | while read -r id; do
               gh run delete "$id"
             done
           fi
@@ -59,12 +59,12 @@ jobs:
       - name: Delete all runs
         if: github.event.inputs.mode == 'all'
         run: |
-          TOTAL=$(gh run list --json databaseId --jq 'length')
+          TOTAL=$(gh run list --json databaseId --jq "[.[] | select(.databaseId != ${{ github.run_id }})] | length")
           if [ "$TOTAL" -eq 0 ]; then
             echo "No runs to delete."
           else
             echo "Deleting all $TOTAL run(s)..."
-            gh run list --json databaseId --jq '.[].databaseId' | while read -r id; do
+            gh run list --json databaseId --jq "[.[] | select(.databaseId != ${{ github.run_id }}) | .databaseId]" | while read -r id; do
               gh run delete "$id"
             done
           fi
