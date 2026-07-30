@@ -51,7 +51,8 @@ jobs:
               | group_by(.workflowName)
               | map(sort_by(.databaseId) | reverse | .[5:] | map(.databaseId))
               | flatten[]
-            " | while read -r id; do
+              | @tsv
+            " | tr '\t' '\n' | while read -r id; do
               gh run delete "$id"
             done
           fi
@@ -64,7 +65,7 @@ jobs:
             echo "No runs to delete."
           else
             echo "Deleting all $TOTAL run(s)..."
-            gh run list --json databaseId --jq "[.[] | select(.databaseId != ${{ github.run_id }}) | .databaseId]" | while read -r id; do
+            gh run list --json databaseId --jq "[.[] | select(.databaseId != ${{ github.run_id }}) | .databaseId] | @tsv" | tr '\t' '\n' | while read -r id; do
               gh run delete "$id"
             done
           fi
