@@ -22,7 +22,7 @@ python-dotenv = ">=1.0"
 jira = "^3.10.5"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.0"
+pytest = "^9.0.0"
 
 [build-system]
 requires = ["poetry-core"]
