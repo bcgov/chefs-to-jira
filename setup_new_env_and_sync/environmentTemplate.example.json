@@ -16,6 +16,7 @@
   "variables": {
     "CDOGS_OUTPUT_TYPE": "docx",
     "CHEFS_API_BASE_URL": "http://submit.digital.gov.bc.ca/app/api/v1",
+    "CHEFS_FORM_ATTACHMENT_FIELD_NAME": "FileUpload",
     "JIRA_COMPONENT": "Action Required - is-not-the-right-component",
     "JIRA_PROJECT": "PINT-is-not-the-right-project",
     "JIRA_TEST_ISSUE_KEY": "PINT-2904-is-not-the-right-key",

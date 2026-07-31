@@ -50,6 +50,7 @@ jobs:
           CHEFS_TEST_SUBMISSION_ID: ${{ secrets.CHEFS_TEST_SUBMISSION_ID }}
 
           CHEFS_API_BASE_URL: ${{ vars.CHEFS_API_BASE_URL }}
+          CHEFS_FORM_ATTACHMENT_FIELD_NAME: ${{ vars.CHEFS_FORM_ATTACHMENT_FIELD_NAME }}
 
           JIRA_API_URL: ${{ secrets.JIRA_API_URL }}
           JIRA_CLIENT_EMAIL: ${{ secrets.JIRA_CLIENT_EMAIL }}
@@ -64,4 +65,3 @@ jobs:
 
         run: |
           python src/main.py
-
