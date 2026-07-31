@@ -9,7 +9,7 @@ from jira_helpers.jira_auth import get_jira_client
 from jira_helpers.jira_updates import attachment_on_issue, add_attachment_to_issue, add_comment_to_issue, add_comment_to_issue_if_missing
 from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query
 
-from utilities.log_helper import LOGGER, get_logs
+from utilities.log_helper import LOGGER
 
 from base64 import b64encode
 from json import dumps
