@@ -132,9 +132,6 @@ for issue in issues:
         )
 
 # === 8. Update JIRA ticket with CDOGS PDF attachment ===
-        attachment=attachment
-        content=content
-
         file = {
           "data": content,
           "filename": f"{outfile_name}"
