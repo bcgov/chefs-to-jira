@@ -13,8 +13,8 @@ def test_jira_attachments():
   assert jira_client is not None, "Should get a valid JIRA client"
 
   # Setup for testing
-  JIRA_TEST_FILE_PATH = os.getcwd() + "/tests/test_files/Quick Test File.txt"
-  JIRA_TEST_FILE_NAME = JIRA_TEST_FILE_PATH.split("/")[-1]
+  jira_test_file_path = os.getcwd() + "/tests/test_files/Quick Test File.txt"
+  jira_test_file_name = jira_test_file_path.split("/")[-1]
   try:
       # Get the test issue.
       issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
@@ -32,26 +32,26 @@ def test_jira_attachments():
       # 5. Check that the test issue was succesfully cleaned up.
 
       # 1. Check that the test attachment is not already on the issue.
-      attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_NAME)
+      attachment_found = attachment_on_issue(issue, jira_test_file_name)
       assert attachment_found is False, "Should not be an attachment on the test ticket before testing"
 
       # 2. Add a test attachment
-      attachment_added = add_attachment_to_issue(jira_client, issue, JIRA_TEST_FILE_PATH)
+      attachment_added = add_attachment_to_issue(jira_client, issue, jira_test_file_path)
       assert attachment_added is True, "Should have positive return of attachment add"
 
       # 3. Check the test attachment is now on the issue.
       issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
-      attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_NAME)
+      attachment_found = attachment_on_issue(issue, jira_test_file_name)
       assert attachment_found is True, "Should find the attachment on the issue after adding it"
 
       # 4. Remove the test attachment
       # Note: JIRA's API does not currently support removing attachments by filename, so this test will fail until that functionality is added. See https://ecosystem.atlassian.net/browse/JRA-123456 for details.
-      attachment_removed = remove_attachment_from_issue(issue, JIRA_TEST_FILE_NAME)
+      attachment_removed = remove_attachment_from_issue(issue, jira_test_file_name)
       assert attachment_removed is True, "Should have positive return of attachment removal"
 
       # 5. Check that the test issue was succesfully cleaned up.
       issue = get_jira_ticket(jira_client, JIRA_TEST_ISSUE_KEY)
-      attachment_found = attachment_on_issue(issue, JIRA_TEST_FILE_NAME)
+      attachment_found = attachment_on_issue(issue, jira_test_file_name)
       assert attachment_found is False, "Should not be an attachment on the test ticket after testing"
 
       LOGGER.info("✅ JIRA attachment tests successful")

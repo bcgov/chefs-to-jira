@@ -60,7 +60,6 @@ jobs:
           JIRA_SUMMARY_FILTER: ${{ vars.JIRA_SUMMARY_FILTER }}
           JIRA_YOUNGER_THAN_MINUTES: ${{ vars.JIRA_YOUNGER_THAN_MINUTES }}
 
-          JIRA_TEST_FILE_PATH: ${{ vars.JIRA_TEST_FILE_PATH }}
           JIRA_TEST_ISSUE_KEY: ${{ vars.JIRA_TEST_ISSUE_KEY }}
 
           TEMP_DIR: ${{ vars.TEMP_DIR }}
