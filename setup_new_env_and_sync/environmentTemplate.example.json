@@ -1,0 +1,26 @@
+{
+  "secrets": {
+    "CDOGS_API_BASE_URL": "https://is-not-a-real-url.api.gov.bc.ca/api/v2/",
+    "CDOGS_APP_ID": "5475D21111-is-not-a-real-id",
+    "CDOGS_CLIENT_ID": "29305A8F-5475D2A1111-is-not-a-real-id",
+    "CDOGS_CLIENT_SECRET": "321e27ab-d66f-45f4-8521-2c1e9f6e1111-is-not-a-real-id",
+    "CDOGS_LOGIN_PROXY": "https://is-not-a-real-login-proxy.gov.bc.ca/auth/realms/comsvcauth/protocol/openid-connect/token",
+    "CHEFS_API_KEY": "277ed8a7-bc11-4af3-ae9f-7e77bc801111-is-not-a-real-id",
+    "CHEFS_FORM_ID": "6b221c3e-e5fc-49d7-892b-2fd011011111-is-not-a-real-id",
+    "CHEFS_TEST_CONFIRMATION_ID": "1E96CFFF-is-not-a-real-id",
+    "CHEFS_TEST_SUBMISSION_ID": "1e96cf28-badc-4d1a-9b6e-65a4843cc555-is-not-a-real-id",
+    "JIRA_API_URL": "https://is-not-a-real-id.nrs.gov.bc.ca/int/jira",
+    "JIRA_CLIENT_EMAIL": "is-not-a-real-email@gov.bc.ca",
+    "JIRA_CLIENT_SECRET": "is-not-a-real-idir-password"
+  },
+  "variables": {
+    "CDOGS_OUTPUT_TYPE": "docx",
+    "CHEFS_API_BASE_URL": "http://submit.digital.gov.bc.ca/app/api/v1",
+    "JIRA_COMPONENT": "Action Required - is-not-the-right-component",
+    "JIRA_PROJECT": "PINT-is-not-the-right-project",
+    "JIRA_TEST_ISSUE_KEY": "PINT-2904-is-not-the-right-key",
+    "JIRA_YOUNGER_THAN_MINUTES": "10080",
+    "LOG_LEVEL": "INFO",
+    "TEMP_DIR": "c:\\temp\\file-helper"
+  }
+}
