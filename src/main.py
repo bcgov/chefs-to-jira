@@ -150,12 +150,13 @@ for issue in issues:
   form_components=form.get("schema").get("components")
 
   # Function adds a key value pair to field_names_with_values if the key matches the field_name.
-  def add_properties_with_field_name(component, fiend_name:str):
+  def add_properties_with_field_name(component, field_name:str):
+    field_name = field_name.lower()
     if "properties" in component:
       raw_properties = component.get("properties")
       properties = {k.lower():v for k,v in raw_properties.items()}
-      if "jiramapping" in properties:
-        jira_field_name = properties.get(fiend_name).lower()
+      if field_name in properties:
+        jira_field_name = properties.get(field_name)
         chefs_field_name = component.get("key")
         new_jira_value = answers.get(chefs_field_name)
         field_names_with_values[jira_field_name] = new_jira_value
@@ -163,8 +164,9 @@ for issue in issues:
   # Iterate over components to get the field mappings
   for component in form_components:
     add_properties_with_field_name(component, "JiraMapping")
-    for subcomponent in form_components:
-      add_properties_with_field_name(subcomponent, "JiraMapping")
+    if "components" in component:
+      for subcomponent in component.get("components"):
+        add_properties_with_field_name(subcomponent, "JiraMapping")
 
 # === 10. Update JIRA ticket with CHEFS answers ===
   issue.update(fields=field_names_with_values)
