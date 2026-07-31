@@ -78,7 +78,7 @@ for issue in issues:
 
 # === 2. Get submission attachments from CHEFS ===
   # The CHEFS Body that JIRA Automation uses to populate the JIRA Ticket includes a link to view the submission:
-  submission_pattern = "view\?s=([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})]"
+  submission_pattern = r"view\?s=([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})]"
   result = re.findall(submission_pattern, issue.fields.description)
   submission_id = ""
   match len(result):
