@@ -28,7 +28,7 @@ def get_jira_tickets_query(project, reporter, component=None, younger_than_minut
 
     if component:
         JQL_query += f' AND component = {jql_literal(component)}'
-
+    LOGGER.debug(f"JQL = {JQL_query}")
     return JQL_query
 
 def get_jira_tickets(client, JQL_query):
