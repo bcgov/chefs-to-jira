@@ -151,6 +151,7 @@ if ($GenerateEnvironment) {
   }
   $workflowContent = Get-Content $workflowSource -Raw
   $workflowContent = $workflowContent -replace 'environment:\s*main', "environment: $EnvironmentName"
+  $workflowContent = $workflowContent -replace '(?m)^name:.*$', "name: Sync $EnvironmentName"
   Set-Content -Path $workflowDest -Value $workflowContent -Encoding UTF8
   Write-Host "Workflow created at: $workflowDest"
   foreach ($name in $secretNames) {

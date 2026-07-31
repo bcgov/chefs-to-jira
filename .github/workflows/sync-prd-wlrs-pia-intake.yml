@@ -1,4 +1,4 @@
-﻿name: Chefs to JIRA Sync
+﻿name: Sync prd-wlrs-pia-intake
 
 on:
   schedule:
@@ -8,7 +8,7 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    environment: prc-sync-wlrs-pia-intake
+    environment: prd-wlrs-pia-intake
     concurrency:
       group: chefs-to-jira
       cancel-in-progress: true
