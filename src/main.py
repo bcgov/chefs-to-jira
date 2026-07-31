@@ -148,19 +148,26 @@ for issue in issues:
 # === 9. Parse the form questions for answers and jira field mapping ===
   field_names_with_values={}
   form_components=form.get("schema").get("components")
-  for component in form_components:
+
+  # Function adds a key value pair to field_names_with_values if the key matches the field_name.
+  def add_properties_with_field_name(component, fiend_name:str):
     if "properties" in component:
       raw_properties = component.get("properties")
       properties = {k.lower():v for k,v in raw_properties.items()}
       if "jiramapping" in properties:
-        jira_field_name = properties.get("jiramapping").lower()
+        jira_field_name = properties.get(fiend_name).lower()
         chefs_field_name = component.get("key")
         new_jira_value = answers.get(chefs_field_name)
         field_names_with_values[jira_field_name] = new_jira_value
 
+  # Iterate over components to get the field mappings
+  for component in form_components:
+    add_properties_with_field_name(component, "JiraMapping")
+    for subcomponent in form_components:
+      add_properties_with_field_name(subcomponent, "JiraMapping")
+
 # === 10. Update JIRA ticket with CHEFS answers ===
-        issue.update(fields=field_names_with_values)
-        issue = issue
+  issue.update(fields=field_names_with_values)
 
 # === 11. Update ticket with a mark that the ticket was pre-populated by Chefs-To-Jira ===
   add_comment_to_issue(jira_client, issue, completion_text)
