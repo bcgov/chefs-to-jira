@@ -9,7 +9,6 @@ if not os.getenv('GITHUB_ACTIONS'):
 
 # ---- JIRA ----
 JIRA_API_URL = os.getenv('JIRA_API_URL')
-JIRA_CLIENT_ID = os.getenv('JIRA_CLIENT_ID', '')
 JIRA_CLIENT_EMAIL = os.getenv('JIRA_CLIENT_EMAIL', '')
 JIRA_CLIENT_SECRET = os.getenv('JIRA_CLIENT_SECRET', '')
 JIRA_CLIENT_TOKEN = os.getenv('JIRA_CLIENT_TOKEN', '')

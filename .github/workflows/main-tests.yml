@@ -53,7 +53,6 @@ jobs:
 
           JIRA_API_URL: ${{ secrets.JIRA_API_URL }}
           JIRA_CLIENT_EMAIL: ${{ secrets.JIRA_CLIENT_EMAIL }}
-          JIRA_CLIENT_ID: ${{ secrets.JIRA_CLIENT_ID }}
           JIRA_CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
 
           JIRA_COMPONENT: ${{ vars.JIRA_COMPONENT }}

@@ -1,5 +1,5 @@
 import jira
-from jira_helpers.constants import JIRA_API_URL, JIRA_CLIENT_ID, JIRA_CLIENT_EMAIL, JIRA_CLIENT_SECRET, JIRA_CLIENT_TOKEN
+from jira_helpers.constants import JIRA_API_URL, JIRA_CLIENT_EMAIL, JIRA_CLIENT_SECRET, JIRA_CLIENT_TOKEN
 from utilities.log_helper import LOGGER
 
 def get_jira_client():
@@ -10,9 +10,8 @@ def get_jira_client():
     # on-prem JIRA out of the box.
     try:
         if JIRA_CLIENT_TOKEN:
-            # This does not work currently. Is JIRA set to allow PAT authentication?
-            auth_kwargs = {"basic_auth": (JIRA_CLIENT_ID, JIRA_CLIENT_TOKEN)}
-            auth_source = "username + API token"
+            auth_kwargs = {"token_auth": JIRA_CLIENT_TOKEN}
+            auth_source = "API token"
         elif JIRA_CLIENT_SECRET:
             # This does work, but will soon be deprecated in favor of OAuth or PATs.
             auth_kwargs = {"basic_auth": (JIRA_CLIENT_EMAIL, JIRA_CLIENT_SECRET)}

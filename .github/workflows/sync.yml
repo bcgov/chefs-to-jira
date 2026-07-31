@@ -16,8 +16,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ vars.PRODUCTION_REF }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -55,7 +53,6 @@ jobs:
 
           JIRA_API_URL: ${{ secrets.JIRA_API_URL }}
           JIRA_CLIENT_EMAIL: ${{ secrets.JIRA_CLIENT_EMAIL }}
-          JIRA_CLIENT_ID: ${{ secrets.JIRA_CLIENT_ID }}
           JIRA_CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
 
           JIRA_COMPONENT: ${{ vars.JIRA_COMPONENT }}
