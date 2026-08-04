@@ -17,7 +17,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pydantic = "^1.10.9"
+pydantic = "^2.0.0"
 python-dotenv = ">=1.0"
 jira = "^3.10.5"
 
