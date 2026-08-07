@@ -5,6 +5,8 @@ on:
     - cron: "*/10 * * * *"
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -13,6 +15,9 @@ jobs:
       group: chefs-to-jira
       cancel-in-progress: true
     timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
 
     steps:
       - uses: actions/checkout@v7
