@@ -13,7 +13,7 @@ def jql_literal(s: str) -> str:
 
 def get_jira_tickets_query(project, reporter, component=None, younger_than_minutes=10080, summary_prefix:str = ""):
     # Calculate the cutoff date for issues created within the last younger_than_minutes
-    cutoff = datetime.datetime.now() - datetime.timedelta(minutes=younger_than_minutes)
+    cutoff = datetime.datetime.now(tz=datetime.timezone.utc) - datetime.timedelta(minutes=younger_than_minutes)
     cutoff_str = cutoff.strftime("%Y-%m-%d %H:%M")
 
     # Search for issues created by CHEFS with the correct project and component
