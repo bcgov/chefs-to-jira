@@ -39,6 +39,10 @@ jobs:
         run: |
           poetry install --with dev
 
+      - name: Run Linter (Ruff)
+        run: |
+          poetry run ruff check .
+
       - name: Run Tests
         env:
           CDOGS_API_BASE_URL: ${{ secrets.CDOGS_API_BASE_URL }}
