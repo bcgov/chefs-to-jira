@@ -5,7 +5,6 @@ import requests
 
 from cdogs_helpers.constants import (
     CDOGS_API_BASE_URL,
-    CDOGS_APP_ID,
     CDOGS_CLIENT_ID,
     CDOGS_CLIENT_SECRET,
     CDOGS_LOGIN_PROXY,

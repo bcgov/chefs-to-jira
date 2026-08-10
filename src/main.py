@@ -1,7 +1,5 @@
 
 import re
-from base64 import b64encode
-from json import dumps
 from pathlib import Path
 
 from cdogs_helpers.cdogs_helpers import generate_cdogs_document
