@@ -24,6 +24,9 @@ jira = "^3.10.5"
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.0"
 
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
