@@ -19,7 +19,7 @@ def generate_chefs_answer_data(s_id=CHEFS_TEST_SUBMISSION_ID):
     # Get a CHEFS form submission
     submission = get_form_submissions(submission_id= s_id)
     data = submission.get("submission").get("data")
-    file_path = save_file(f"chefs_test_answer_data.json", json.dumps(data))
+    file_path = save_file("chefs_test_answer_data.json", json.dumps(data))
     print("CHEFS form submission data downloaded to:", file_path)
 
 

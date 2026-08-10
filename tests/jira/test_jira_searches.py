@@ -47,7 +47,7 @@ def test_jira_searches():
         LOGGER.info(f"Issue components: {[component.name for component in issue.fields.components]}")
         LOGGER.info(f"Issue assignee: {issue.fields.assignee.displayName if issue.fields.assignee else 'Unassigned'}  ")
         LOGGER.info(f"Issue Labels: {issue.fields.labels}")
-        LOGGER.info(f"Issue Ticket History:")
+        LOGGER.info("Issue Ticket History:")
         for history in issue.changelog.histories:
             if history.items and len(history.items) > 0:
                 LOGGER.info(f"{history.created} - {history.author.displayName}: {history.items[0].field} changed to {history.items[0].toString}")
