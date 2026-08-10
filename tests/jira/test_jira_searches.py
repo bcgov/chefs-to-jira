@@ -1,7 +1,8 @@
-from jira_helpers.constants import JIRA_PROJECT, JIRA_COMPONENT, JIRA_TEST_ISSUE_KEY
+from jira_helpers.constants import JIRA_COMPONENT, JIRA_PROJECT, JIRA_TEST_ISSUE_KEY
 from jira_helpers.jira_auth import get_jira_client
-from jira_helpers.jira_searches import get_jira_tickets, get_jira_tickets_query, get_jira_ticket
+from jira_helpers.jira_searches import get_jira_ticket, get_jira_tickets, get_jira_tickets_query
 from utilities.log_helper import LOGGER
+
 
 def test_jira_searches():
   """Test that we can search for JIRA tickets and retrieve them successfully"""

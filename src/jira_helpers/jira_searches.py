@@ -1,6 +1,8 @@
 import datetime
+
 from jira.client import ResultList
 from jira.resources import Issue
+
 from utilities.log_helper import LOGGER
 
 

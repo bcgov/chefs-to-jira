@@ -1,5 +1,6 @@
 import os
-from dotenv import load_dotenv, find_dotenv
+
+from dotenv import find_dotenv, load_dotenv
 
 # Load .env file only if not running in GitHub Actions (to avoid overriding secrets)
 if not os.getenv('GITHUB_ACTIONS'):

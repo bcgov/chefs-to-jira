@@ -1,10 +1,16 @@
+import os
+
 from jira_helpers.constants import JIRA_TEST_ISSUE_KEY
 from jira_helpers.jira_auth import get_jira_client
 from jira_helpers.jira_searches import get_jira_ticket
-from jira_helpers.jira_updates import add_comment_to_issue, attachment_on_issue, add_attachment_to_issue, remove_attachment_from_issue
-import os
-
+from jira_helpers.jira_updates import (
+  add_attachment_to_issue,
+  add_comment_to_issue,
+  attachment_on_issue,
+  remove_attachment_from_issue,
+)
 from utilities.log_helper import LOGGER
+
 
 def test_jira_attachments():
 

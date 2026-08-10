@@ -1,5 +1,6 @@
 from jira_helpers.jira_auth import get_jira_client
 
+
 def test_jira_connection():
     """Test that we get a valid JIRA client instance"""
     jira_client = get_jira_client()

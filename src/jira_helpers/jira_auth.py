@@ -1,6 +1,13 @@
 import jira
-from jira_helpers.constants import JIRA_API_URL, JIRA_CLIENT_EMAIL, JIRA_CLIENT_SECRET, JIRA_CLIENT_TOKEN
+
+from jira_helpers.constants import (
+    JIRA_API_URL,
+    JIRA_CLIENT_EMAIL,
+    JIRA_CLIENT_SECRET,
+    JIRA_CLIENT_TOKEN,
+)
 from utilities.log_helper import LOGGER
+
 
 def get_jira_client():
     # Create a JIRA client instance.

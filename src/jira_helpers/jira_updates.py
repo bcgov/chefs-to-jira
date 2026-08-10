@@ -1,7 +1,10 @@
-from jira.resources import Issue
 from io import BytesIO
-from utilities.log_helper import LOGGER
+
+from jira.resources import Issue
+
 from jira_helpers.jira_searches import get_jira_comments
+from utilities.log_helper import LOGGER
+
 
 # Compares a file to the attachments on a JIRA issue. Returns true if a match is found, false if not.
 def attachment_on_issue(issue: Issue, file_name: str) -> bool:

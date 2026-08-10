@@ -1,20 +1,32 @@
 
-from cdogs_helpers.cdogs_helpers import generate_cdogs_document
-from cdogs_helpers.constants import CDOGS_OUTPUT_TYPE
-
-from chefs_helpers.chefs_helpers import get_chefs_form, get_form_submissions, get_submission_attachments, get_form_cdogs_template
-
-from jira_helpers.constants import JIRA_PROJECT, JIRA_COMPONENT, JIRA_YOUNGER_THAN_MINUTES, JIRA_SUMMARY_FILTER
-from jira_helpers.jira_auth import get_jira_client
-from jira_helpers.jira_updates import attachment_on_issue, add_attachment_to_issue, add_comment_to_issue, add_comment_to_issue_if_missing
-from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query
-
-from utilities.log_helper import LOGGER
-
+import re
 from base64 import b64encode
 from json import dumps
 from pathlib import Path
-import re
+
+from cdogs_helpers.cdogs_helpers import generate_cdogs_document
+from cdogs_helpers.constants import CDOGS_OUTPUT_TYPE
+from chefs_helpers.chefs_helpers import (
+  get_chefs_form,
+  get_form_cdogs_template,
+  get_form_submissions,
+  get_submission_attachments,
+)
+from jira_helpers.constants import (
+  JIRA_COMPONENT,
+  JIRA_PROJECT,
+  JIRA_SUMMARY_FILTER,
+  JIRA_YOUNGER_THAN_MINUTES,
+)
+from jira_helpers.jira_auth import get_jira_client
+from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query
+from jira_helpers.jira_updates import (
+  add_attachment_to_issue,
+  add_comment_to_issue,
+  add_comment_to_issue_if_missing,
+  attachment_on_issue,
+)
+from utilities.log_helper import LOGGER
 
 LOGGER.debug("LOGGER - Chefs-to-JIRA script Started!")
 

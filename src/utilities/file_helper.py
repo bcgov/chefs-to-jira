@@ -1,7 +1,9 @@
 # This is a simple file helper module for handling temporary files, mostly for testing.
 import base64
 import os
+
 from utilities.constants import TEMP_DIR
+
 
 # Stores templates and attachments from CHEFS locally for dev/testing
 def save_file(filename, content):

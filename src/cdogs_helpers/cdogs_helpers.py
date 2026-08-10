@@ -1,8 +1,15 @@
-from cdogs_helpers.constants import CDOGS_API_BASE_URL, CDOGS_CLIENT_ID, CDOGS_CLIENT_SECRET, CDOGS_LOGIN_PROXY, CDOGS_APP_ID
 import json
-import requests
 import time
 
+import requests
+
+from cdogs_helpers.constants import (
+    CDOGS_API_BASE_URL,
+    CDOGS_APP_ID,
+    CDOGS_CLIENT_ID,
+    CDOGS_CLIENT_SECRET,
+    CDOGS_LOGIN_PROXY,
+)
 from utilities.log_helper import LOGGER
 
 _TOKEN_CACHE = {

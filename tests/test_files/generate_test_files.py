@@ -1,10 +1,11 @@
+import base64
+import json
+import os
+
 from cdogs_helpers.cdogs_helpers import generate_cdogs_document
 from chefs_helpers.chefs_helpers import get_form_cdogs_template, get_form_submissions
 from chefs_helpers.constants import CHEFS_FORM_ID, CHEFS_TEST_SUBMISSION_ID
 from utilities.file_helper import load_file, save_file
-import base64
-import json
-import os
 
 # Automated testing requires test files, and this code helps us by automatically generating them in case they change.
 

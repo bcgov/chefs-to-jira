@@ -1,4 +1,5 @@
 import logging
+
 from utilities.constants import LOG_LEVEL
 
 # Storage for all log messages

@@ -1,7 +1,9 @@
-from cdogs_helpers.cdogs_helpers import get_cdogs_token, generate_cdogs_document
-from utilities.file_helper import load_file
-import os
 import base64
+import os
+
+from cdogs_helpers.cdogs_helpers import generate_cdogs_document, get_cdogs_token
+from utilities.file_helper import load_file
+
 
 def test_get_cdogs_token():
     try:
