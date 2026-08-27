@@ -11,7 +11,7 @@ def jql_literal(s: str) -> str:
     """This is mostly important for the Component field, which has a trailing space in the value."""
     return f'"{s}"'
 
-def get_jira_tickets_query(project, reporter, component=None, younger_than_minutes=10080, summary_prefix:str = ""):
+def get_jira_tickets_query(project, reporter, component=None, younger_than_minutes=10080, summary_prefix:str = "", description_filter:str = ""):
     # Calculate the cutoff date for issues created within the last younger_than_minutes
     cutoff = datetime.datetime.now(tz=datetime.UTC) - datetime.timedelta(minutes=younger_than_minutes)
     cutoff_str = cutoff.strftime("%Y-%m-%d %H:%M")
@@ -24,6 +24,9 @@ def get_jira_tickets_query(project, reporter, component=None, younger_than_minut
     )
     if summary_prefix:
         JQL_query = f'{JQL_query} AND SUMMARY ~ "{summary_prefix}%"'
+
+    if description_filter:
+        JQL_query = f'{JQL_query} AND description ~ "{description_filter}"'
 
     if reporter:
         JQL_query += f' AND reporter = {jql_literal(reporter)}'

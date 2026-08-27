@@ -1,22 +1,33 @@
+import re
+from urllib.parse import urlparse
+
 from jira_helpers.constants import JIRA_COMPONENT, JIRA_PROJECT, JIRA_TEST_ISSUE_KEY
 from jira_helpers.jira_auth import get_jira_client
 from jira_helpers.jira_searches import get_jira_ticket, get_jira_tickets, get_jira_tickets_query
 from utilities.log_helper import LOGGER
+from chefs_helpers.constants import CHEFS_API_BASE_URL
 
 
 def test_jira_searches():
   """Test that we can search for JIRA tickets and retrieve them successfully"""
+
   # Get a JIRA client instance
   jira_client = get_jira_client()
   assert jira_client is not None, "Should get a valid JIRA client"
 
+  # Include only tickets that match the CHEFS instance we are using.
+  description_filter = ""
+  if CHEFS_API_BASE_URL:
+    parsed = urlparse(CHEFS_API_BASE_URL)
+    description_filter = f"{parsed.scheme}://{parsed.netloc}"
+
   # Test the search function
   try:
-      default_query = get_jira_tickets_query(JIRA_PROJECT, reporter="donotreplyCHEFS@gov.bc.ca", component=JIRA_COMPONENT)
+      default_query = get_jira_tickets_query(JIRA_PROJECT, reporter="donotreplyCHEFS@gov.bc.ca", component=JIRA_COMPONENT, description_filter=description_filter)
       issues = get_jira_tickets(jira_client, default_query)
       if not issues:
           print("No issues found matching the default criteria, expanding search.")
-          expanded_query = get_jira_tickets_query(JIRA_PROJECT, reporter=None, component=None, younger_than_minutes=50400)
+          expanded_query = get_jira_tickets_query(JIRA_PROJECT, reporter=None, component=None, younger_than_minutes=50400, description_filter=description_filter)
           issues = get_jira_tickets(jira_client, expanded_query)
 
       if not issues:

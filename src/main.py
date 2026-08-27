@@ -1,6 +1,7 @@
 
 import re
 from pathlib import Path
+from urllib.parse import urlparse
 
 import requests
 from jira.exceptions import JIRAError
@@ -13,6 +14,7 @@ from chefs_helpers.chefs_helpers import (
   get_form_submissions,
   get_submission_attachments,
 )
+from chefs_helpers.constants import CHEFS_API_BASE_URL
 from jira_helpers.constants import (
   JIRA_COMPONENT,
   JIRA_PROJECT,
@@ -62,6 +64,9 @@ try:
     jql_kwargs["component"] = JIRA_COMPONENT
   if JIRA_SUMMARY_FILTER:
     jql_kwargs["summary_prefix"] = JIRA_SUMMARY_FILTER
+  if CHEFS_API_BASE_URL:
+    parsed = urlparse(CHEFS_API_BASE_URL)
+    jql_kwargs["description_filter"] = f"{parsed.scheme}://{parsed.netloc}"
   jql = get_jira_tickets_query(JIRA_PROJECT, **jql_kwargs)
 
   # DEV-OVERRIDE (gives quick access to a wide variety of JIRA tickets):
