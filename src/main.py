@@ -1,20 +1,37 @@
 
+import re
+from pathlib import Path
+from urllib.parse import urlparse
+
+import requests
+from jira.exceptions import JIRAError
+
 from cdogs_helpers.cdogs_helpers import generate_cdogs_document
 from cdogs_helpers.constants import CDOGS_OUTPUT_TYPE
-
-from chefs_helpers.chefs_helpers import get_chefs_form, get_form_submissions, get_submission_attachments, get_form_cdogs_template
-
-from jira_helpers.constants import JIRA_PROJECT, JIRA_COMPONENT, JIRA_YOUNGER_THAN_MINUTES, JIRA_SUMMARY_FILTER
+from chefs_helpers.chefs_helpers import (
+  get_chefs_form,
+  get_form_cdogs_template,
+  get_form_submissions,
+  get_submission_attachments,
+)
+from chefs_helpers.constants import CHEFS_API_BASE_URL
+from jira_helpers.constants import (
+  JIRA_COMPONENT,
+  JIRA_PROJECT,
+  JIRA_SUMMARY_FILTER,
+  JIRA_YOUNGER_THAN_MINUTES,
+)
 from jira_helpers.jira_auth import get_jira_client
-from jira_helpers.jira_updates import attachment_on_issue, add_attachment_to_issue, add_comment_to_issue, add_comment_to_issue_if_missing
 from jira_helpers.jira_searches import get_jira_comments, get_jira_tickets, get_jira_tickets_query
-
+from jira_helpers.jira_updates import (
+  add_attachment_to_issue,
+  add_comment_to_issue,
+  add_comment_to_issue_if_missing,
+  attachment_on_issue,
+  get_fields_by_display_name,
+  update_with_complex_fields
+)
 from utilities.log_helper import LOGGER
-
-from base64 import b64encode
-from json import dumps
-from pathlib import Path
-import re
 
 LOGGER.debug("LOGGER - Chefs-to-JIRA script Started!")
 
@@ -49,6 +66,9 @@ try:
     jql_kwargs["component"] = JIRA_COMPONENT
   if JIRA_SUMMARY_FILTER:
     jql_kwargs["summary_prefix"] = JIRA_SUMMARY_FILTER
+  if CHEFS_API_BASE_URL:
+    parsed = urlparse(CHEFS_API_BASE_URL)
+    jql_kwargs["description_filter"] = f"{parsed.scheme}://{parsed.netloc}"
   jql = get_jira_tickets_query(JIRA_PROJECT, **jql_kwargs)
 
   # DEV-OVERRIDE (gives quick access to a wide variety of JIRA tickets):
@@ -68,7 +88,7 @@ for issue in issues:
 
 # === 2. Get submission attachments from CHEFS ===
   # The CHEFS Body that JIRA Automation uses to populate the JIRA Ticket includes a link to view the submission:
-  submission_pattern = "view\?s=([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})]"
+  submission_pattern = r"view\?s=([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})]"
   result = re.findall(submission_pattern, issue.fields.description)
   submission_id = ""
   match len(result):
@@ -92,7 +112,7 @@ for issue in issues:
       if not attachment_on_issue(issue, filename):
         try:
           add_attachment_to_issue(jira_client, issue, attachment)
-        except Exception as e:
+        except (JIRAError, requests.exceptions.RequestException) as e:
           comment_error_text="Chefs-To-Jira failed to upload an attachment to this ticket. Check CHEFS for the missing attachment."
           add_comment_to_issue_if_missing(jira_client, issue, comment_error_text)
           LOGGER.error(f"❌ Error adding attachment to JIRA tickets: {e}")
@@ -106,7 +126,7 @@ for issue in issues:
   cdogs_template = get_form_cdogs_template(form_version_id=form_version_id)
 
 # === 6. Get submission answers from CHEFS ===
-  answers = submission.get("submission").get("data")
+  chefs_answers = submission.get("submission").get("data")
 
 # === 7. Use answers and template from CHEFS to generate CDOGS PDF ===
   if cdogs_template is not None:
@@ -123,7 +143,7 @@ for issue in issues:
         template_base_64_str = ''.join(chr(c) for c in template_byte_array)
 
         content = generate_cdogs_document(
-            answer_data=answers,
+            answer_data=chefs_answers,
             outfile_name=output_name_no_extension,
             output_type=output_type,
             template_data=template_base_64_str,
@@ -138,11 +158,11 @@ for issue in issues:
         }
         try:
           add_attachment_to_issue(jira_client, issue, file)
-        except Exception as e:
+        except (JIRAError, requests.exceptions.RequestException) as e:
           comment_error_text="Chefs-To-Jira failed to upload an attachment to this ticket. Check CHEFS for the missing attachment."
           add_comment_to_issue_if_missing(jira_client, issue, comment_error_text)
           LOGGER.error(f"❌ Error adding cdogs template to JIRA tickets: {e}")
-    except Exception as e:
+    except (requests.exceptions.RequestException, ValueError, OSError) as e:
       LOGGER.error(f"❌ Error occurred generating cdogs output file: {e}")
 
 # === 9. Parse the form questions for answers and jira field mapping ===
@@ -150,26 +170,31 @@ for issue in issues:
   form_components=form.get("schema").get("components")
 
   # Function adds a key value pair to field_names_with_values if the key matches the field_name.
-  def add_properties_with_field_name(component, field_name:str):
-    field_name = field_name.lower()
+  def add_properties_with_field_name(issue, component, answers=chefs_answers):
+    fields_by_display_names = get_fields_by_display_name(jira_client, issue)
     if "properties" in component:
       raw_properties = component.get("properties")
       properties = {k.lower():v for k,v in raw_properties.items()}
-      if field_name in properties:
-        jira_field_name = properties.get(field_name)
+      chefs_to_jira_field_name = "jiramapping"
+      if chefs_to_jira_field_name in properties:
+        jira_display_name = properties[chefs_to_jira_field_name]
         chefs_field_name = component.get("key")
-        new_jira_value = answers.get(chefs_field_name)
-        field_names_with_values[jira_field_name] = new_jira_value
+        if "value" in answers.get(chefs_field_name):
+          new_jira_value = answers.get(chefs_field_name)["value"]
+        else:
+          new_jira_value = answers.get(chefs_field_name)
+        true_field_name = fields_by_display_names[jira_display_name]
+        field_names_with_values[true_field_name] = new_jira_value  #noqa: B023
 
   # Iterate over components to get the field mappings
   for component in form_components:
-    add_properties_with_field_name(component, "JiraMapping")
+    add_properties_with_field_name(issue, component, chefs_answers)
     if "components" in component:
       for subcomponent in component.get("components"):
-        add_properties_with_field_name(subcomponent, "JiraMapping")
+        add_properties_with_field_name(issue, subcomponent, chefs_answers)
 
 # === 10. Update JIRA ticket with CHEFS answers ===
-  issue.update(fields=field_names_with_values)
+  update_with_complex_fields(jira_client, issue, field_names_with_values)
 
 # === 11. Update ticket with a mark that the ticket was pre-populated by Chefs-To-Jira ===
   add_comment_to_issue(jira_client, issue, completion_text)
