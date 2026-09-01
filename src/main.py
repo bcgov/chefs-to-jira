@@ -28,6 +28,8 @@ from jira_helpers.jira_updates import (
   add_comment_to_issue,
   add_comment_to_issue_if_missing,
   attachment_on_issue,
+  get_fields_by_display_name,
+  update_with_complex_fields
 )
 from utilities.log_helper import LOGGER
 
@@ -168,26 +170,31 @@ for issue in issues:
   form_components=form.get("schema").get("components")
 
   # Function adds a key value pair to field_names_with_values if the key matches the field_name.
-  def add_properties_with_field_name(component, field_name:str, answers=chefs_answers):
-    field_name = field_name.lower()
+  def add_properties_with_field_name(issue, component, answers=chefs_answers):
+    fields_by_display_names = get_fields_by_display_name(jira_client, issue)
     if "properties" in component:
       raw_properties = component.get("properties")
       properties = {k.lower():v for k,v in raw_properties.items()}
-      if field_name in properties:
-        jira_field_name = properties.get(field_name)
+      chefs_to_jira_field_name = "jiramapping"
+      if chefs_to_jira_field_name in properties:
+        jira_display_name = properties[chefs_to_jira_field_name]
         chefs_field_name = component.get("key")
-        new_jira_value = answers.get(chefs_field_name)
-        field_names_with_values[jira_field_name] = new_jira_value  #noqa: B023
+        if "value" in answers.get(chefs_field_name):
+          new_jira_value = answers.get(chefs_field_name)["value"]
+        else:
+          new_jira_value = answers.get(chefs_field_name)
+        true_field_name = fields_by_display_names[jira_display_name]
+        field_names_with_values[true_field_name] = new_jira_value  #noqa: B023
 
   # Iterate over components to get the field mappings
   for component in form_components:
-    add_properties_with_field_name(component, "JiraMapping", chefs_answers)
+    add_properties_with_field_name(issue, component, chefs_answers)
     if "components" in component:
       for subcomponent in component.get("components"):
-        add_properties_with_field_name(subcomponent, "JiraMapping", chefs_answers)
+        add_properties_with_field_name(issue, subcomponent, chefs_answers)
 
 # === 10. Update JIRA ticket with CHEFS answers ===
-  issue.update(fields=field_names_with_values)
+  update_with_complex_fields(jira_client, issue, field_names_with_values)
 
 # === 11. Update ticket with a mark that the ticket was pre-populated by Chefs-To-Jira ===
   add_comment_to_issue(jira_client, issue, completion_text)
