@@ -78,10 +78,10 @@ def get_fields_by_display_name(jira_client, issue: Issue|str) -> dict:
 
   # Do two passes to reduce chefs case sensitivity requirement.
   # First pass add them all lowercase. Second pass uses actual case, and overwrites any previous lowercase that would be duplicate.
-  for issue_field_id, v in issue.raw["fields"].items():
+  for issue_field_id in issue.raw["fields"]:
     if issue_field_id in jira_client._cached_field_mappings:
       issue_fields_by_display_name[jira_client._cached_field_mappings[issue_field_id].lower()] = issue_field_id
-  for issue_field_id, v in issue.raw["fields"].items():
+  for issue_field_id in issue.raw["fields"]:
     if issue_field_id in jira_client._cached_field_mappings:
       issue_fields_by_display_name[jira_client._cached_field_mappings[issue_field_id]] = issue_field_id
 
