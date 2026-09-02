@@ -29,7 +29,7 @@ from jira_helpers.jira_updates import (
   add_comment_to_issue_if_missing,
   attachment_on_issue,
   get_fields_by_display_name,
-  update_with_complex_fields
+  update_with_complex_fields,
 )
 from utilities.log_helper import LOGGER
 
