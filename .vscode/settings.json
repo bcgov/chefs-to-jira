@@ -10,6 +10,10 @@
   },
   
   // Only critical setting: tell ESLint to use flat config
-  "eslint.useFlatConfig": true
+  "eslint.useFlatConfig": true,
+
+  "files.associations": {
+    ".trivyignore": "plaintext"
+  }
 }
 
