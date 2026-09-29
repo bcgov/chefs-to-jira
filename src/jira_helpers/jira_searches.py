@@ -20,7 +20,8 @@ def get_jira_tickets_query(project, reporter, component=None, younger_than_minut
     JQL_query = (
         f'request-channel-type = email AND '
         f'project = {jql_literal(project)} AND '
-        f'created >= {jql_literal(cutoff_str)}'
+        f'created >= {jql_literal(cutoff_str)} AND '
+        'status != Closed'
     )
     if summary_prefix:
         JQL_query = f'{JQL_query} AND SUMMARY ~ "{summary_prefix}%"'
@@ -39,7 +40,7 @@ def get_jira_tickets_query(project, reporter, component=None, younger_than_minut
 def get_jira_tickets(client, JQL_query):
 
     try:
-        issues: ResultList[Issue] = client.search_issues(JQL_query, maxResults=50, expand='changelog')
+        issues: ResultList[Issue] = client.search_issues(JQL_query, maxResults=50, expand='changelog,names')
     except Exception as e:
         LOGGER.error(f"Error searching for JIRA tickets: {e}")
         raise
@@ -49,11 +50,13 @@ def get_jira_tickets(client, JQL_query):
 def get_jira_ticket(client, issue_key):
 
     try:
-        issue = client.issue(issue_key, expand='changelog')
+        issue = client.issue(issue_key, expand='changelog,names')
         return issue
     except Exception as e:
         LOGGER.error(f"Error fetching JIRA ticket {issue_key}: {e}")
         raise
+
+
 
 
 def get_jira_comments(issue):

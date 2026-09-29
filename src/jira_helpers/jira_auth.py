@@ -30,6 +30,7 @@ def get_jira_client():
 
         client = jira.JIRA(server=JIRA_API_URL, **auth_kwargs)
         LOGGER.info(f"Successfully connected to JIRA API using {auth_source}")
+
         return client
     except Exception as e:
         LOGGER.error(f"Error connecting to JIRA API: {e}")
