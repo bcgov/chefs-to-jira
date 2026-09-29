@@ -16,7 +16,7 @@ When CHEFS submits it sends an email. The JIRA Project has Email Requests config
 
 The github action "sync.yml" uses github environment variables to run on a schedule. It calls main.py, which contains the bulk of the projects logic. The script:
 
-1. Checks JIRA for new submissions
+1. Checks configured on-prem JIRA for new submissions
 
    For each found submission that still requires work:
 
@@ -36,7 +36,7 @@ The following things are needed to deploy this to a new environment:
 
 - A service account account with JIRA Credentials with API read/write permission.
 
-- JIRA Project Email Requests configured to generate new tickets when an email is received from the CHEFS submission. (This can use the email protocol Microsoft Graph API)
+- JIRA Project "Email Requests" functionality configured to generate new tickets when an email is received from the CHEFS submission. (This can use the email protocol Microsoft Graph API)
 
 - A CHEFS form with API integration enabled, and its API Key
 
@@ -44,19 +44,34 @@ The following things are needed to deploy this to a new environment:
 
 This project can be fairly quickly rolled out to new business areas given they meet the requirements. The process for doing so is:
 
-1. Create a new Environment in this project (i.e. prod-JIRAPROJECT). The environment variables specify:
+1. Create a new github Environment in this project (i.e. prod-JIRAPROJECT).
 
-- Which Chefs-to-Jira Github Branch and Commit to use
+- The script setup_new_env_and_sync/setup_new_github_environment.ps1 can be used to quickly create the github secrets/variables.
+- The example config file setup_new_env_and_sync/environmentTemplate.example.json specifies all environment secrets/variables.
 
-- Which CDOGS, CHEFS, and JIRA to connect to and their credentials
+The environment secrets/variables specify:
+
+- Which CDOGS, CHEFS, and JIRA on-prem to connect to and their credentials
 
 - Which JIRA Project, and optionally component to look for submissions for.
 
-2. Create a new sync.yml (i.e. .github/workflows/sync-JIRAPROJECT.yml). The sync.yml specifies:
+- Log level
 
-- The github environment to get configuration from
+2. Update the CHEFS form to leverage and jira field mappings. These are fields in the CHEFS form where its answers should be put into specific jira fields.
 
-- Frequency of checks
+- This has only been tested with Text and Select form "component", but may work with others.
+
+- To map a chefs component to a jira form, add a "Custom Properties" key value pair on the Text or Select components API tab. The key is always "JiraMapping". Value is the JIRA field.
+
+- Note that in JIRA there are both true names for fields, and display names - the script tries to match the JiraMapping first to the actual field name and then to the display name. Field names are case sensitive, though this script will try and find a case insensitive one if an exact match is not found.
+
+3. Duplicate and rename to create a new sync.yml with a project specific name (i.e. .github/workflows/sync-JIRAPROJECT.yml). Change the following three attribute values in the new sync.yml:
+
+- Modify "name" to match your project (i.e. Sync prd-ministry-project)
+
+- Modify the "environment" to match the environment you created in step 1.
+
+- Optionally, modify the frequency the sync runs by changing the "cron:" value. This uses "cron" formatting; google is helpful, "_/10 _ \* \* \*" is every 10 minutes.
 
 ## Code Layout
 
@@ -64,11 +79,13 @@ This project can be fairly quickly rolled out to new business areas given they m
 
 - src folder contains all production code
 
-- src/main.py contains the script which does the work. References \*\_helpers heavily.
+- src/main.py is the script that handles most business logic. References /src's \_helpers heavily.
 
 - src/utilities folder contains logging and file functions used mostly in automated testing.
 
-- src/\*\_helpers folders contain functions which provide specific functionality for that API.
+- src/\*\_helpers folders are named after the system's API they provide functionality for.
+
+- setup_new_env_and_sync folder assists in quickly rolling out for a new project.
 
 - tests folder contains automated testing support, heavily referencing src, and has a seperate readme.
 
